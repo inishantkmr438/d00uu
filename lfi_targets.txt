@@ -1,0 +1,25 @@
+# High-value local files for LFI verification
+/etc/passwd
+/etc/hosts
+/etc/shadow
+/proc/self/environ
+/proc/self/cmdline
+/proc/net/tcp
+/var/log/auth.log
+/var/log/nginx/access.log
+/var/log/apache2/access.log
+/app/.env
+/config/.env
+/.env
+/opt/app/config.yml
+/home/<user>/.ssh/id_rsa
+C:\\Windows\\win.ini
+C:\\Windows\\System32\\drivers\\etc\\hosts
+C:\\boot.ini
+
+# App source hints (adjust names)
+/index.php
+/app.js
+/server.js
+/WEB-INF/web.xml
+/WEB-INF/classes/application.properties

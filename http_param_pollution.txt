@@ -1,0 +1,5 @@
+otp=123456&otp=654321
+otp=654321&otp=123456
+otp=%20%20123456&otp=123456
+username=admin&username=victim
+returnUrl=/dashboard&returnUrl=//attacker.tld

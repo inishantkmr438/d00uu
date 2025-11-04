@@ -1,0 +1,6 @@
+POST /render HTTP/1.1
+Host: target.tld
+Content-Type: application/json
+Cookie: SESSION=REPLACE
+
+{"template":"§PATH§"}

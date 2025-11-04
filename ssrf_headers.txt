@@ -1,0 +1,6 @@
+# Use selectively depending on target feature
+Metadata-Flavor: Google
+Metadata: true
+X-Forwarded-For: 127.0.0.1
+X-Original-URL: /
+Host: 169.254.169.254

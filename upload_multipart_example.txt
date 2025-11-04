@@ -1,0 +1,11 @@
+POST /upload HTTP/1.1
+Host: target.tld
+Content-Type: multipart/form-data; boundary=----BOUNDARY
+Cookie: SESSION=REPLACE
+
+------BOUNDARY
+Content-Disposition: form-data; name="file"; filename="§FILENAME§"
+Content-Type: §MIMETYPE§
+
+§FILE_CONTENT§
+------BOUNDARY--

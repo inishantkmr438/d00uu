@@ -1,0 +1,29 @@
+# Generic (try in text-rendered inputs)
+{{7*7}}
+${7*7}
+#{7*7}
+<%= 7*7 %>
+${{7*7}}
+[[${7*7}]]
+
+# Jinja2/Flask
+{{7*7}}
+{{7*'7'}}
+
+# Twig
+{{7*7}}
+{{ dump() }}
+
+# Freemarker
+${7*7}
+${"a"?upper_case}
+
+# Velocity
+#set($x=7*7)$x
+${"a".toString()}
+
+# ERB/Rails
+<%= 7*7 %>
+
+# Handlebars/Mustache (logicless — look for double render / triple mustache)
+{{{7}}}

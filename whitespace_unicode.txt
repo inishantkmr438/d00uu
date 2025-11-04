@@ -1,0 +1,10 @@
+%20admin
+admin%20
+admin%09
+%09admin
+admin%C2%A0
+%C2%A0admin
+admin%E2%80%8B
+%E2%80%8Badmin
+admin%E2%80%8D
+admin%0A

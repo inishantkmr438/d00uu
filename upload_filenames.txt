@@ -1,0 +1,19 @@
+avatar.php
+avatar.php.jpg
+avatar.jpg.php
+avatar.pHp
+avatar.jsp
+avatar.asp
+payload.jsp;.jpg
+payload%2Ephp
+payload%2Ephp.jpg
+.htaccess
+; .jpg
+avatar.;.jpg
+avatar%00.jpg
+avatar.png%0a.jpg
+..%2f..%2favatar.png
+..\..\avatar.png
+avatar.svg
+payload.html.svg
+payload.svg.jpg

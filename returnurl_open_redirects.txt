@@ -1,0 +1,10 @@
+/dashboard
+/
+/login
+https://attacker.tld
+//attacker.tld
+/\attacker.tld
+/%5Cattacker.tld
+/..%2f..%2fadmin
+/%2f%2fattacker.tld
+https:%2f%2fattacker.tld

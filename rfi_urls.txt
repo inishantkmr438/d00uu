@@ -1,0 +1,10 @@
+# RFI URL list for testing remote includes/fetches
+https://example.com/robots.txt
+https://example.com/
+http://{{COLLAB}}/rfi.txt
+http://{{COLLAB}}/ok
+http://attacker.tld/test.txt
+# Data scheme probe (may be blocked)
+data:text/plain,OK
+# file handlers (legacy)
+http://127.0.0.1/

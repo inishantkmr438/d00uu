@@ -1,0 +1,3 @@
+GET /search?q=§SSTI§ HTTP/1.1
+Host: target.tld
+Cookie: SESSION=REPLACE

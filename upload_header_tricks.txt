@@ -1,0 +1,9 @@
+# In multipart parts
+Content-Type: image/jpeg
+Content-Type: image/svg+xml
+Content-Type: application/octet-stream
+
+# Content-Disposition variations
+Content-Disposition: form-data; name="file"; filename="avatar.php"
+Content-Disposition: form-data; name="file"; filename="..%2f..%2favatar.png"
+Content-Disposition: form-data; name="file"; filename="payload.svg.jpg"

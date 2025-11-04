@@ -1,0 +1,10 @@
+image/jpeg
+image/png
+image/gif
+image/svg+xml
+text/html
+text/plain
+application/octet-stream
+application/pdf
+application/x-php
+application/x-msdownload
