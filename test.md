@@ -3,11 +3,13 @@ Here’s a detailed, input-validation-focused test plan for Login and OTP flows,
 Login page (username/password)
 •  Empty/missing/wrong type
 ◦  Try: omit fields, send empty, send arrays/objects, wrong Content-Type.
+
+
 ◦  Payloads:
+
     [Form-URL-Encoded]
     POST /login
     Content-Type: application/x-www-form-urlencoded
-
     username=&password=
     ---
     username=admin&password=
@@ -39,11 +41,14 @@ Login page (username/password)
 
 
 
-text
+
 •  Expected: uniform 400/422 with generic error; not 500; no login. Vulns: missing-param acceptance, array coercion, type juggling.
 •  Length boundaries and DoS
 ◦  Try: below-min, above-max, huge strings; high-entropy.
+
+
 ◦  Payloads:
+
     username=a&password=a
     ---
     username=aa&password=aa
@@ -55,11 +60,14 @@ text
     password=$(...) 100000 chars
 
 
-text
+
 •  Expected: enforced min/max; fast 4xx. Vulns: truncation causing “admin ”≠“admin”, memory/CPU spikes.
 •  Whitespace and normalization
 ◦  Try: leading/trailing/mixed whitespace; tabs/newlines; Unicode spaces; normalization.
+
+
 ◦  Payloads:
+
     username=" admin"
     username="admin "
     username="ad min"
@@ -71,22 +79,28 @@ text
     username="adm\u202Eni"                  # RLO
 
 
-text
+
 •  Expected: documented trimming policy; consistent normalization. Vulns: login bypass via mismatch between UI, app, DB collation.
 •  Encoding/decoding quirks
 ◦  Try: single/double/mixed encodings; null bytes; overlong UTF-8; base64.
+
+
 ◦  Payloads:
+
     username=admin%00&password=pass%00
     username=admin%2527           # %27 once, %2527 double
     username=%2f..%2fadmin
     username=%C0%AA (overlong)
     username=YWRtaW4= (sent in a param expected plain)
 
-text
+
 •  Expected: decode-once; reject control bytes. Vulns: filter bypass, parser differentials.
 •  Injection probes (SQL/NoSQL/LDAP/XPath)
 ◦  Try: in both username and password; also as JSON types.
+
+
 ◦  Payloads:
+
     # SQLi
     ' OR '1'='1
     " OR "1"="1" --
@@ -108,11 +122,14 @@ text
     ' or '1'='1
     " or count(/*)=1 or "
 
-text
+
 •  Expected: generic failure; no stack traces; no bypass. Vulns: auth bypass, error-based banners, different response sizes.
 •  Username/email format rules
 ◦  Try: invalid RFC email, IDN, plus-tags, quoted local parts.
+
+
 ◦  Payloads:
+
     user@domain
     user@domain..com
     "user name"@example.com
@@ -120,17 +137,21 @@ text
     użytkownik@eksempel.no
     xn--bcher-kva@example.com
 
-text
+
 •  Expected: policy-consistent server validation. Vulns: inconsistent client/server checks; enum via format-specific errors.
 •  Error surfaces and XSS
 ◦  Try: inject in username to reflect in error banner or field echo.
+
+
 ◦  Payloads:
+
+
     <img src=x onerror=alert(1)>
     "><svg/onload=alert(1)>
     </script><script>alert(1)</script>
 
 
-html
+
 •  Expected: escaped output; CSP blocks inline. Vulns: reflected XSS on login failure.
 •  Response behavior and enumeration
 ◦  Try: valid vs invalid usernames with random passwords; measure content/length/timing.
@@ -138,44 +159,54 @@ html
 ◦  Expected: identical text, status, timing. Vulns: username enumeration via message, code (404/401), size, latency.
 •  Rate limiting and lockout
 ◦  Try: 5–10 rapid attempts per user/IP; then per different IP; then distributed.
+
+
 ◦  Payloads:
+
     username=target&password=<random 12 chars>  # repeat
 
 
-text
+
 •  Expected: 429 or step-up (captcha), or temporary lockout. Vulns: no throttling; lockout DoS on victim.
 •  Session/cookie hygiene
 ◦  Check: session ID rotates on success; flags Secure, HttpOnly, SameSite=Lax/Strict; Path/Domain narrowly scoped.
 ◦  Expected: rotation + secure flags. Vulns: fixation (pre-login cookie persists), missing flags.
 •  Transport/redirects
 ◦  Try: force http://; check HSTS; test returnUrl/open redirect params.
+
+
 ◦  Payloads:
+
     returnUrl=/dashboard
     returnUrl=https://attacker.tld/
     returnUrl=//attacker.tld/
     returnUrl=/\attacker.tld
     next=/../admin
 
-text
+
 •  Expected: HTTPS only; validated allowlist; relative-only. Vulns: open redirect, mixed content.
 •  CSRF (if login alters server state or sets persistent session)
 ◦  Try: cross-site POST without token; check if stateful changes occur.
 ◦  Expected: no stateful side effects; or CSRF-protected. Vulns: session priming, login CSRF to bind victim browser.
 •  Type juggling and coercion (PHP/JS backends)
 ◦  Try: booleans, numeric-like strings, 0e-hash.
+
 ◦  Payloads:
+
     {"username":"admin","password":true}
     {"username":"admin","password":0}
     {"username":"admin","password":"0e215962017"}
     password[]=anything
 
-text
+
 •  Expected: strict type checks; reject. Vulns: loose comparison bypass.
 
 OTP page (code entry/verification)
 •  Presence/type/structure
 ◦  Try: missing otp, array/object, wrong Content-Type.
+
 ◦  Payloads:
+
     [Form]
     otp=
     ---
@@ -191,11 +222,14 @@ OTP page (code entry/verification)
     ---
     {"otp":{"$ne":""}}
 
-text
+
 •  Expected: 400/422 generic. Vulns: implicit defaults, array coercion to accept first element.
 •  Length/charset/normalization
 ◦  Try: 1–8 digits; non-digits; Unicode digits; whitespace; zero-width.
+
+
 ◦  Payloads:
+
     0
     12345
     123456
@@ -208,11 +242,14 @@ text
     " 123456 "
     123\n456
     123-456
-text
+
+
 •  Expected: strict fixed length (e.g., 6), ASCII digits only after normalization; reject others. Vulns: acceptance of non-digits/whitespace, normalization bypass.
 •  Brute force viability
 ◦  Burp Intruder: Sniper/Pitchfork over otp param; throttle; Grep-Match static success marker; monitor 429/lockout.
+
 ◦  Payload generation:
+
     000000
     000001
     ...
@@ -220,7 +257,7 @@ text
     common: 123456, 000000, 111111, 121212, 654321, 222222
 
 
-text
+
 •  Expected: per-user/session/IP limits (2–5 tries), cooldown/step-up. Vulns: no rate limit; global code space shared.
 •  Replay/reuse
 ◦  Try: submit same valid code twice; reuse after resend; reuse across sessions/devices.
@@ -230,30 +267,39 @@ text
 ◦  Expected: strict TTL with small drift window. Vulns: long-lived codes or none.
 •  Binding and tampering
 ◦  Try: change identifier while verifying: username/accountId/transactionId/orderId.
+
+
 ◦  Payloads:
+
+
     {"username":"victim","otp":"123456","txId":"A"}
     # then reuse otp with {"username":"attacker","txId":"B"}
 
-json
+
 •  Expected: OTP bound to original subject + action. Vulns: confused deputy (verify-other-user).
 •  Duplicate/ambiguous params (HPP)
 ◦  Try: send otp twice (one correct, one wrong) in different orders and encodings.
+
 ◦  Payloads:
+
     otp=123456&otp=654321
     otp=654321&otp=123456
     otp=%20%20123456&otp=123456
-text
+
+
 •  Expected: reject duplicates or deterministic rule documented; no acceptance of “first-wins” bypass. Vulns: HPP bypass.
 •  Encoding/decoding quirks
 ◦  Try: URL double-encoding, base64, null bytes, overlong UTF-8.
+
 ◦  Payloads:
+
     otp=%31%32%33%34%35%36
     otp=%2531%2532%2533%2534%2535%2536   # double-encoded
     otp=MTIzNDU2                           # base64 of 123456
     otp=123%000456
     otp=%C0%B1%C0%B2%C0%B3%C0%B4%C0%B5%C0%B6  # overlong
 
-text
+
 •  Expected: decode-once only; reject control bytes. Vulns: filter bypass via double-decode.
 •  Concurrent/race
 ◦  Try: send same valid OTP concurrently in 2 requests.
@@ -269,7 +315,9 @@ Burp Suite usage patterns
 •  Repeater
 ◦  Toggle Content-Type between form and JSON; inject payloads above; observe status, body hash/length, headers; check Set-Cookie rotation after login.
 •  Intruder
+
 ◦  Positions: set § around username, password, otp. Use:
+
     [SQLi probes]
     ' OR '1'='1
     " OR "1"="1" --
@@ -295,7 +343,7 @@ Burp Suite usage patterns
     " 123456 "
     123-456
 
-text
+
 •  Grep-Match: “Invalid”, “User does not exist”, “Too many attempts”, “Welcome”, regex for success token. Grep-Extract: auth/session tokens. Throttle requests; monitor 429.
 •  Comparer
 ◦  Compare valid vs invalid user responses and pre/post-login cookies; compare OTP wrong-length vs wrong-value responses.
