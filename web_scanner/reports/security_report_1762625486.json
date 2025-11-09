@@ -1,0 +1,176 @@
+{
+    "target": "http://testaspnet.vulnweb.com",
+    "scan_time": "2025-11-08 23:41:26",
+    "security_headers": {
+        "present": [
+            "Cache-Control"
+        ],
+        "missing": [
+            "Strict-Transport-Security",
+            "Content-Security-Policy",
+            "X-Frame-Options",
+            "X-Content-Type-Options",
+            "X-XSS-Protection",
+            "Referrer-Policy",
+            "Permissions-Policy",
+            "X-Permitted-Cross-Domain-Policies",
+            "Cross-Origin-Embedder-Policy",
+            "Cross-Origin-Opener-Policy",
+            "Cross-Origin-Resource-Policy",
+            "Expect-CT"
+        ],
+        "misconfigured": [],
+        "score": 10,
+        "max_score": 130,
+        "percentage": 7.6923076923076925
+    },
+    "vulnerabilities": [
+        {
+            "title": "Missing Security Header - HTTP Strict Transport Security (HSTS)",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Forces browsers to use HTTPS connections only. Recommended: max-age=31536000; includeSubDomains; preload",
+            "severity": "HIGH",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Missing Security Header - Content Security Policy (CSP)",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Prevents XSS, clickjacking, and code injection attacks. Recommended: default-src 'self'; script-src 'self'; object-src 'none'",
+            "severity": "HIGH",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Missing Security Header - X-Frame-Options",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Prevents clickjacking attacks by controlling iframe embedding. Recommended: DENY or SAMEORIGIN",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Missing Security Header - X-Content-Type-Options",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Prevents MIME-sniffing attacks. Recommended: nosniff",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Missing Security Header - X-XSS-Protection (Legacy)",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Enables browser XSS filters (deprecated, use CSP instead). Recommended: 1; mode=block",
+            "severity": "LOW",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Missing Security Header - Referrer Policy",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Controls how much referrer information is shared. Recommended: no-referrer or strict-origin-when-cross-origin",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Missing Security Header - Permissions Policy (formerly Feature-Policy)",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Controls which browser features can be used. Recommended: geolocation=(), microphone=(), camera=()",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Missing Security Header - X-Permitted-Cross-Domain-Policies",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Controls cross-domain policies for Adobe Flash and PDF. Recommended: none",
+            "severity": "LOW",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Missing Security Header - Cross-Origin-Embedder-Policy (COEP)",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Prevents loading cross-origin resources without explicit permission. Recommended: require-corp",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Missing Security Header - Cross-Origin-Opener-Policy (COOP)",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Isolates browsing context from cross-origin windows. Recommended: same-origin",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Missing Security Header - Cross-Origin-Resource-Policy (CORP)",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Prevents other domains from reading responses. Recommended: same-origin",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Missing Security Header - Expect-CT (Deprecated)",
+            "url": "http://testaspnet.vulnweb.com",
+            "description": "Certificate Transparency enforcement (deprecated). Recommended: max-age=86400, enforce",
+            "severity": "LOW",
+            "timestamp": "2025-11-08 23:41:01"
+        },
+        {
+            "title": "Broken Access Control - Potential IDOR",
+            "url": "http://testaspnet.vulnweb.com/Comments.aspx?id=1",
+            "description": "Parameter 'id' may be vulnerable to IDOR",
+            "severity": "HIGH",
+            "timestamp": "2025-11-08 23:41:05"
+        },
+        {
+            "title": "Broken Access Control - Potential IDOR",
+            "url": "http://testaspnet.vulnweb.com/Comments.aspx?id=3",
+            "description": "Parameter 'id' may be vulnerable to IDOR",
+            "severity": "HIGH",
+            "timestamp": "2025-11-08 23:41:06"
+        },
+        {
+            "title": "Broken Access Control - Potential IDOR",
+            "url": "http://testaspnet.vulnweb.com/Comments.aspx?id=4",
+            "description": "Parameter 'id' may be vulnerable to IDOR",
+            "severity": "HIGH",
+            "timestamp": "2025-11-08 23:41:06"
+        },
+        {
+            "title": "Broken Access Control - Potential IDOR",
+            "url": "http://testaspnet.vulnweb.com/ReadNews.aspx?id=3",
+            "description": "Parameter 'id' may be vulnerable to IDOR",
+            "severity": "HIGH",
+            "timestamp": "2025-11-08 23:41:06"
+        },
+        {
+            "title": "Broken Access Control - Potential IDOR",
+            "url": "http://testaspnet.vulnweb.com/ReadNews.aspx?id=1",
+            "description": "Parameter 'id' may be vulnerable to IDOR",
+            "severity": "HIGH",
+            "timestamp": "2025-11-08 23:41:07"
+        },
+        {
+            "title": "Broken Access Control - Potential IDOR",
+            "url": "http://testaspnet.vulnweb.com/ReadNews.aspx?id=4&NewsAd=ads%2Fdef.html",
+            "description": "Parameter 'id' may be vulnerable to IDOR",
+            "severity": "HIGH",
+            "timestamp": "2025-11-08 23:41:07"
+        },
+        {
+            "title": "Broken Access Control - Potential IDOR",
+            "url": "http://testaspnet.vulnweb.com/ReadNews.aspx?id=1&NewsAd=ads%2Fdef.html",
+            "description": "Parameter 'id' may be vulnerable to IDOR",
+            "severity": "HIGH",
+            "timestamp": "2025-11-08 23:41:07"
+        },
+        {
+            "title": "Broken Access Control - Potential IDOR",
+            "url": "http://testaspnet.vulnweb.com/ReadNews.aspx?id=3&NewsAd=ads%2Fdef.html",
+            "description": "Parameter 'id' may be vulnerable to IDOR",
+            "severity": "HIGH",
+            "timestamp": "2025-11-08 23:41:08"
+        },
+        {
+            "title": "Broken Access Control - Potential IDOR",
+            "url": "http://testaspnet.vulnweb.com/ReadNews.aspx?id=4",
+            "description": "Parameter 'id' may be vulnerable to IDOR",
+            "severity": "HIGH",
+            "timestamp": "2025-11-08 23:41:08"
+        }
+    ]
+}

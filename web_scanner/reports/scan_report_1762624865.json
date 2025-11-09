@@ -1,0 +1,61 @@
+{
+    "target": "http://testphp.vulnweb.com",
+    "scan_time": "2025-11-08 23:31:04",
+    "vulnerabilities": [
+        {
+            "title": "Missing Security Header - Strict-Transport-Security",
+            "url": "http://testphp.vulnweb.com",
+            "description": "HSTS header missing - credentials may be transmitted insecurely",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:31:05"
+        },
+        {
+            "title": "Missing Security Header - Content-Security-Policy",
+            "url": "http://testphp.vulnweb.com",
+            "description": "CSP header missing - XSS protection weakened",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:31:05"
+        },
+        {
+            "title": "Missing Security Header - X-Frame-Options",
+            "url": "http://testphp.vulnweb.com",
+            "description": "Clickjacking protection missing",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:31:05"
+        },
+        {
+            "title": "Missing Security Header - X-Content-Type-Options",
+            "url": "http://testphp.vulnweb.com",
+            "description": "MIME-sniffing protection missing",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:31:05"
+        },
+        {
+            "title": "Missing Security Header - Referrer-Policy",
+            "url": "http://testphp.vulnweb.com",
+            "description": "Referrer policy not configured",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:31:05"
+        },
+        {
+            "title": "Missing Security Header - Permissions-Policy",
+            "url": "http://testphp.vulnweb.com",
+            "description": "Permissions policy not set",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:31:05"
+        }
+    ],
+    "security_headers": {
+        "present": [],
+        "missing": [
+            "Strict-Transport-Security",
+            "Content-Security-Policy",
+            "X-Frame-Options",
+            "X-Content-Type-Options",
+            "Referrer-Policy",
+            "Permissions-Policy"
+        ],
+        "score": 0.0
+    },
+    "js_libraries": []
+}

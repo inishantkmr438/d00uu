@@ -1,0 +1,103 @@
+{
+  "target": "http://testphp.vulnweb.com",
+  "scan_time": "2025-11-09 01:57:44",
+  "total_findings": 12,
+  "vulnerabilities": [
+    {
+      "number": 1,
+      "title": "Missing Security Header - HTTP Strict Transport Security (HSTS)",
+      "severity": "HIGH",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Forces browsers to use HTTPS connections only",
+      "recommended": "max-age=31536000; includeSubDomains; preload"
+    },
+    {
+      "number": 2,
+      "title": "Missing Security Header - Content Security Policy (CSP)",
+      "severity": "HIGH",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Prevents XSS, clickjacking, and code injection attacks",
+      "recommended": "default-src 'self'; script-src 'self'; object-src 'none'"
+    },
+    {
+      "number": 3,
+      "title": "Missing Security Header - X-Frame-Options",
+      "severity": "MEDIUM",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Prevents clickjacking attacks by controlling iframe embedding",
+      "recommended": "DENY or SAMEORIGIN"
+    },
+    {
+      "number": 4,
+      "title": "Missing Security Header - X-Content-Type-Options",
+      "severity": "MEDIUM",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Prevents MIME-sniffing attacks",
+      "recommended": "nosniff"
+    },
+    {
+      "number": 5,
+      "title": "Missing Security Header - X-XSS-Protection (Legacy)",
+      "severity": "LOW",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Enables browser XSS filters (deprecated, use CSP instead)",
+      "recommended": "1; mode=block"
+    },
+    {
+      "number": 6,
+      "title": "Missing Security Header - Referrer-Policy",
+      "severity": "MEDIUM",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Controls how much referrer information is shared",
+      "recommended": "no-referrer or strict-origin-when-cross-origin"
+    },
+    {
+      "number": 7,
+      "title": "Missing Security Header - Permissions Policy (formerly Feature-Policy)",
+      "severity": "MEDIUM",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Controls which browser features can be used",
+      "recommended": "geolocation=(), microphone=(), camera=()"
+    },
+    {
+      "number": 8,
+      "title": "Missing Security Header - X-Permitted-Cross-Domain-Policies",
+      "severity": "LOW",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Controls cross-domain policies for Adobe Flash and PDF",
+      "recommended": "none"
+    },
+    {
+      "number": 9,
+      "title": "Missing Security Header - Cross-Origin-Embedder-Policy (COEP)",
+      "severity": "MEDIUM",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Prevents loading cross-origin resources without explicit permission",
+      "recommended": "require-corp"
+    },
+    {
+      "number": 10,
+      "title": "Missing Security Header - Cross-Origin-Opener-Policy (COOP)",
+      "severity": "MEDIUM",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Isolates browsing context from cross-origin windows",
+      "recommended": "same-origin"
+    },
+    {
+      "number": 11,
+      "title": "Missing Security Header - Cross-Origin-Resource-Policy (CORP)",
+      "severity": "MEDIUM",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Prevents other domains from reading responses",
+      "recommended": "same-origin"
+    },
+    {
+      "number": 12,
+      "title": "Missing Security Header - Expect-CT (Deprecated)",
+      "severity": "LOW",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Certificate Transparency enforcement (deprecated)",
+      "recommended": "max-age=86400, enforce"
+    }
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "target": "http://flipkart.com",
+  "scan_time": "2025-11-09 02:42:34",
+  "owasp_standard": "2025",
+  "total_vulnerabilities": 20,
+  "severity_breakdown": {
+    "critical": 1,
+    "high": 1,
+    "medium": 15,
+    "low": 3
+  },
+  "vulnerabilities": [
+    {
+      "number": 1,
+      "title": "Missing Security Header - HTTP Strict Transport Security (HSTS)",
+      "severity": "HIGH",
+      "url": "http://flipkart.com",
+      "description": "Forces browsers to use HTTPS connections only",
+      "recommended": "max-age=31536000; includeSubDomains; preload",
+      "owasp": "A02:2025"
+    },
+    {
+      "number": 2,
+      "title": "Missing Security Header - X-Frame-Options",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "Prevents clickjacking attacks by controlling iframe embedding",
+      "recommended": "DENY or SAMEORIGIN",
+      "owasp": "A02:2025"
+    },
+    {
+      "number": 3,
+      "title": "Missing Security Header - X-Content-Type-Options",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "Prevents MIME-sniffing attacks",
+      "recommended": "nosniff",
+      "owasp": "A02:2025"
+    },
+    {
+      "number": 4,
+      "title": "Missing Security Header - Referrer-Policy",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "Controls how much referrer information is shared",
+      "recommended": "no-referrer or strict-origin-when-cross-origin",
+      "owasp": "A02:2025"
+    },
+    {
+      "number": 5,
+      "title": "Missing Security Header - Permissions Policy",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "Controls which browser features can be used",
+      "recommended": "geolocation=(), microphone=(), camera=()",
+      "owasp": "A02:2025"
+    },
+    {
+      "number": 6,
+      "title": "Missing Security Header - Cross-Origin-Embedder-Policy (COEP)",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "Prevents loading cross-origin resources without explicit permission",
+      "recommended": "require-corp",
+      "owasp": "A02:2025"
+    },
+    {
+      "number": 7,
+      "title": "Missing Security Header - Cross-Origin-Opener-Policy (COOP)",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "Isolates browsing context from cross-origin windows",
+      "recommended": "same-origin",
+      "owasp": "A02:2025"
+    },
+    {
+      "number": 8,
+      "title": "Missing Security Header - Cross-Origin-Resource-Policy (CORP)",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "Prevents other domains from reading responses",
+      "recommended": "same-origin",
+      "owasp": "A02:2025"
+    },
+    {
+      "number": 9,
+      "title": "Missing Security Header - X-XSS-Protection (Legacy)",
+      "severity": "LOW",
+      "url": "http://flipkart.com",
+      "description": "Enables browser XSS filters (deprecated, use CSP instead)",
+      "recommended": "1; mode=block",
+      "owasp": "A02:2025"
+    },
+    {
+      "number": 10,
+      "title": "Missing Security Header - X-Permitted-Cross-Domain-Policies",
+      "severity": "LOW",
+      "url": "http://flipkart.com",
+      "description": "Controls cross-domain policies for Adobe Flash and PDF",
+      "recommended": "none",
+      "owasp": "A02:2025"
+    },
+    {
+      "number": 11,
+      "title": "Missing Security Header - Expect-CT (Deprecated)",
+      "severity": "LOW",
+      "url": "http://flipkart.com",
+      "description": "Certificate Transparency enforcement (deprecated)",
+      "recommended": "max-age=86400, enforce",
+      "owasp": "A02:2025"
+    },
+    {
+      "number": 12,
+      "title": "SSRF (Server-Side Request Forgery)",
+      "severity": "CRITICAL",
+      "url": "http://flipkart.com/communication-preferences/push?t=all",
+      "description": "SSRF now part of Broken Access Control in 2025",
+      "recommended": "Validate and whitelist URLs/IPs",
+      "owasp": "A01:2025"
+    },
+    {
+      "number": 13,
+      "title": "Supply Chain - Missing SRI",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "External script lacks integrity check",
+      "recommended": "Add SRI hashes to all external scripts",
+      "owasp": "A03:2025"
+    },
+    {
+      "number": 14,
+      "title": "Supply Chain - Missing SRI",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "External script lacks integrity check",
+      "recommended": "Add SRI hashes to all external scripts",
+      "owasp": "A03:2025"
+    },
+    {
+      "number": 15,
+      "title": "Supply Chain - Missing SRI",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "External script lacks integrity check",
+      "recommended": "Add SRI hashes to all external scripts",
+      "owasp": "A03:2025"
+    },
+    {
+      "number": 16,
+      "title": "Supply Chain - Missing SRI",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "External script lacks integrity check",
+      "recommended": "Add SRI hashes to all external scripts",
+      "owasp": "A03:2025"
+    },
+    {
+      "number": 17,
+      "title": "Supply Chain - Missing SRI",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "External script lacks integrity check",
+      "recommended": "Add SRI hashes to all external scripts",
+      "owasp": "A03:2025"
+    },
+    {
+      "number": 18,
+      "title": "Supply Chain - Missing SRI",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "External script lacks integrity check",
+      "recommended": "Add SRI hashes to all external scripts",
+      "owasp": "A03:2025"
+    },
+    {
+      "number": 19,
+      "title": "Supply Chain - Missing SRI",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "External script lacks integrity check",
+      "recommended": "Add SRI hashes to all external scripts",
+      "owasp": "A03:2025"
+    },
+    {
+      "number": 20,
+      "title": "Supply Chain - Missing SRI",
+      "severity": "MEDIUM",
+      "url": "http://flipkart.com",
+      "description": "External script lacks integrity check",
+      "recommended": "Add SRI hashes to all external scripts",
+      "owasp": "A03:2025"
+    }
+  ]
+}

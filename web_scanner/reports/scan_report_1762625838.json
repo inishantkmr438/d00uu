@@ -1,0 +1,55 @@
+{
+    "target": "https://flipkart.com",
+    "scan_time": "2025-11-08 23:46:48",
+    "vulnerabilities": [
+        {
+            "title": "Missing Security Header - Strict-Transport-Security",
+            "url": "https://flipkart.com",
+            "description": "HSTS header missing - credentials may be transmitted insecurely",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:46:49"
+        },
+        {
+            "title": "Missing Security Header - X-Frame-Options",
+            "url": "https://flipkart.com",
+            "description": "Clickjacking protection missing",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:46:49"
+        },
+        {
+            "title": "Missing Security Header - X-Content-Type-Options",
+            "url": "https://flipkart.com",
+            "description": "MIME-sniffing protection missing",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:46:49"
+        },
+        {
+            "title": "Missing Security Header - Referrer-Policy",
+            "url": "https://flipkart.com",
+            "description": "Referrer policy not configured",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:46:49"
+        },
+        {
+            "title": "Missing Security Header - Permissions-Policy",
+            "url": "https://flipkart.com",
+            "description": "Permissions policy not set",
+            "severity": "MEDIUM",
+            "timestamp": "2025-11-08 23:46:49"
+        }
+    ],
+    "security_headers": {
+        "present": [
+            "Content-Security-Policy"
+        ],
+        "missing": [
+            "Strict-Transport-Security",
+            "X-Frame-Options",
+            "X-Content-Type-Options",
+            "Referrer-Policy",
+            "Permissions-Policy"
+        ],
+        "score": 16.666666666666664
+    },
+    "js_libraries": []
+}

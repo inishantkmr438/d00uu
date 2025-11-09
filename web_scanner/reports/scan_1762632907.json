@@ -1,0 +1,34 @@
+{
+  "vulnerabilities": [
+    {
+      "title": "Missing Security Header - Strict-Transport-Security",
+      "severity": "MEDIUM",
+      "description": "HSTS missing"
+    },
+    {
+      "title": "Missing Security Header - Content-Security-Policy",
+      "severity": "MEDIUM",
+      "description": "CSP missing"
+    },
+    {
+      "title": "Missing Security Header - X-Frame-Options",
+      "severity": "MEDIUM",
+      "description": "Clickjacking protection missing"
+    },
+    {
+      "title": "Missing Security Header - X-Content-Type-Options",
+      "severity": "MEDIUM",
+      "description": "MIME sniffing protection missing"
+    },
+    {
+      "title": "Missing Security Header - Referrer-Policy",
+      "severity": "MEDIUM",
+      "description": "Referrer policy missing"
+    },
+    {
+      "title": "Missing Security Header - Permissions-Policy",
+      "severity": "MEDIUM",
+      "description": "Permissions policy missing"
+    }
+  ]
+}

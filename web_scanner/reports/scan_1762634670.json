@@ -1,0 +1,54 @@
+{
+  "target": "http://testphp.vulnweb.com",
+  "scan_time": "2025-11-09 02:14:30",
+  "scan_mode": "standard",
+  "total_vulnerabilities": 5,
+  "severity_breakdown": {
+    "critical": 0,
+    "high": 2,
+    "medium": 3,
+    "low": 0
+  },
+  "vulnerabilities": [
+    {
+      "number": 1,
+      "title": "Missing Header - Strict-Transport-Security",
+      "severity": "HIGH",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Forces browsers to use HTTPS connections only",
+      "recommended": "max-age=31536000; includeSubDomains; preload"
+    },
+    {
+      "number": 2,
+      "title": "Missing Header - Content-Security-Policy",
+      "severity": "HIGH",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Prevents XSS, clickjacking, and code injection attacks",
+      "recommended": "default-src 'self'; script-src 'self'"
+    },
+    {
+      "number": 3,
+      "title": "Missing Header - X-Frame-Options",
+      "severity": "MEDIUM",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Prevents clickjacking attacks",
+      "recommended": "DENY or SAMEORIGIN"
+    },
+    {
+      "number": 4,
+      "title": "Missing Header - X-Content-Type-Options",
+      "severity": "MEDIUM",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Prevents MIME-sniffing attacks",
+      "recommended": "nosniff"
+    },
+    {
+      "number": 5,
+      "title": "Missing Header - Referrer-Policy",
+      "severity": "MEDIUM",
+      "url": "http://testphp.vulnweb.com",
+      "description": "Controls referrer information sharing",
+      "recommended": "no-referrer"
+    }
+  ]
+}
