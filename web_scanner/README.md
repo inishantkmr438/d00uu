@@ -1,6 +1,3 @@
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
-
-# yes write a cleaned up markdown version fixing lines but dont remove any exsting content
 
 🔒 **Ultimate Web Security Tester v9.1**[^1]
 
