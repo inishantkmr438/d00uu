@@ -1,7 +1,3 @@
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
-
-# cool. lets update this MD file
-
 # Advanced \& Realistic 10-Day Web Application Penetration Testing Study Plan
 
 **Target Audience:** Cybersecurity professionals with basic security knowledge
