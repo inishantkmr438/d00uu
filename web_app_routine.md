@@ -405,7 +405,10 @@ Practical Lab
     Learn blind XSS exploitation
     
     Complete 30+ PortSwigger labs
-    Day 4: Authentication \& Authorization Attacks
+
+---
+
+##  Day 4: Authentication \& Authorization Attacks
 
 Study Time: 4-5 hours
 Morning: Authentication Flaws (2 hours)
@@ -576,7 +579,10 @@ Practical Lab
     Understand OAuth vulnerabilities
     
     Complete 22 PortSwigger labs
-    Day 5: IDOR, Access Control \& Business Logic
+
+---
+
+## Day 5: IDOR, Access Control \& Business Logic
 
 Study Time: 4-5 hours
 Morning: IDOR Fundamentals (2 hours)
@@ -718,7 +724,10 @@ Practical Lab
     Understand business logic flaws
     
     Complete 24 PortSwigger labs
-    Day 6: API Security \& GraphQL
+
+---
+
+## Day 6: API Security \& GraphQL
 
 Study Time: 4-5 hours
 Morning: REST API Fundamentals (2 hours)
@@ -885,7 +894,10 @@ Practical Lab
     Exploit mass assignment
     
     Complete VAmPI challenges
-    Day 7: SSRF, XXE, \& Deserialization
+
+---
+
+##   Day 7: SSRF, XXE, \& Deserialization
 
 Study Time: 4-5 hours
 Morning: Server-Side Request Forgery (2 hours)
@@ -1027,7 +1039,9 @@ Today's Checklist
 
     Complete 26 PortSwigger labs
 
-Day 8: Advanced Topics & Real-World Chains
+---
+
+## Day 8: Advanced Topics & Real-World Chains
 
 Study Time: 4-5 hours
 Morning: HTTP Request Smuggling & Cache Poisoning (2 hours)
@@ -1141,7 +1155,9 @@ Today's Checklist
 
     Complete 10+ advanced labs
 
-Day 9: Tool Mastery & Automation
+---
+
+## Day 9: Tool Mastery & Automation
 
 Study Time: 4-5 hours
 Morning: Burp Suite Pro Features (2 hours)
@@ -1242,7 +1258,9 @@ Today's Checklist
 
     Build reusable toolkit
 
-Day 10: Capstone CTF & Reporting
+---
+
+##  Day 10: Capstone CTF & Reporting
 
 Study Time: 4-5 hours
 Morning: Full Penetration Test (3 hours)
@@ -1322,8 +1340,10 @@ Today's Checklist
 
     Document all learnings
 
+---
+
 Continuous Learning Path
-Week 2-4: Specialization
+##Week 2-4: Specialization
 
     Choose: Bug Bounty OR Enterprise Pentesting OR Red Team
 
@@ -1331,7 +1351,7 @@ Week 2-4: Specialization
 
     Complete 10+ HTB boxes in specialty
 
-Month 2-3: Certification Prep
+##Month 2-3: Certification Prep
 
     BSCP (Burp Suite Certified Practitioner)
 
@@ -1339,7 +1359,7 @@ Month 2-3: Certification Prep
 
     OSWE (Offensive Security Web Expert) - Advanced
 
-Month 4+: Real-World Practice
+##Month 4+: Real-World Practice
 
     Join bug bounty programs (HackerOne, Bugcrowd)
 
@@ -2133,7 +2153,7 @@ X-HTTP-Method-Override: DELETE
 
 #### Business Logic Flaws
 
-**Race Conditions:**
+**XRace Conditions:**
 
 ```python
 # Example: Transfer money race condition
