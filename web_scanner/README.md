@@ -1,8 +1,15 @@
-🔒 Ultimate Web Security Tester v9.1
+<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
 
-[![Python Version](https://img.shields.io![License](https://img.shields.io/badge/license-Educational.shields.io/badge/tests-42mprehensive Python-based web application security scanner combining OWASP testing methodologies, Burp Suite Pro features, and automated vulnerability detection.
+# yes write a cleaned up markdown version fixing lines but dont remove any exsting content
 
-text
+🔒 **Ultimate Web Security Tester v9.1**[^1]
+
+[[^2]
+[[^3]
+
+Python-based web application security scanner combining OWASP testing methodologies, Burp Suite–style features, and automated vulnerability detection.[^4][^5][^1]
+
+```text
   _   _ _ _   _                 _         _____         _            
  | | | | | |_(_)_ __ ___   __ _| |_ ___  |_   _|__  ___| |_ ___ _ __ 
  | | | | | __| | '_ ` _ \ / _` | __/ _ \   | |/ _ \/ __| __/ _ \ '__|
@@ -10,56 +17,43 @@ text
   \___/|_|\__|_|_| |_| |_|\__,_|\__\___|   |_|\___||___/\__\___|_|   
                                                                       
                           v9.1 - Complete Edition
+```
 
-🎯 What Can This Tool Do?
+🎯 **What Can This Tool Do?**[^5]
 
-Ultimate Tester performs 42+ automated security tests across 6 major categories:
+Ultimate Tester performs **42+ automated security tests** across **6 major categories**:[^5]
 
-    ✅ Security Headers - 12 critical HTTP headers
+- ✅ Security Headers – 12 critical HTTP headers
+- ✅ OWASP Top 10 – 2021 \& 2025 (release candidate) standards[^1][^4]
+- ✅ Burp Suite Pro – CSRF, Path Traversal, Open Redirect–style checks[^6][^5]
+- ✅ Authentication – User enumeration, autocomplete
+- ✅ Session Management – Cookie security, randomness
+- ✅ Data Validation – 15 injection tests (SQL, XSS, Command, etc.)[^7][^3]
 
-    ✅ OWASP Top 10 - 2021 & 2025 standards
+***
 
-    ✅ Burp Suite Pro - CSRF, Path Traversal, Open Redirect
+## 📋 Table of Contents
 
-    ✅ Authentication - User enumeration, autocomplete
+- Quick Start
+- Features
+    - Security Headers
+    - OWASP Testing
+    - Burp Pro Features
+    - Authentication Testing
+    - Session Management
+    - Data Validation
+- Installation
+- Usage Examples
+- Output Examples
+- Configuration
+- Contributing
+- License
 
-    ✅ Session Management - Cookie security, randomness
+***
 
-    ✅ Data Validation - 15 injection tests (SQL, XSS, Command, etc.)
+## 🚀 Quick Start
 
-📋 Table of Contents
-
-    Quick Start
-
-    Features
-
-        Security Headers
-
-        OWASP Testing
-
-        Burp Pro Features
-
-        Authentication Testing
-
-        Session Management
-
-        Data Validation
-
-    Installation
-
-    Usage Examples
-
-    Output Examples
-
-    Configuration
-
-    Contributing
-
-    License
-
-🚀 Quick Start
-
-bash
+```bash
 # Install dependencies
 pip install requests beautifulsoup4
 
@@ -74,27 +68,37 @@ python3 ultimate_tester_v9.1.py -u http://example.com \
   --session-tests \
   --data-validation \
   -O report.json
+```
 
-⚠️ Legal Notice: Only test systems you own or have explicit permission to test.
-✨ Features
-1. Security Headers Module
+⚠️ **Legal Notice:** Only test systems you own or have explicit permission to test; unauthorized security testing can be illegal in many jurisdictions.[^3]
 
-🔹 Tests: 12 headers | 🔹 Always Enabled
+***
 
-Detects missing HTTP security headers that protect against attacks.
-Headers Tested:
-Header	Protection Against	Severity
-Strict-Transport-Security	SSL stripping, downgrade attacks	🔴 HIGH
-Content-Security-Policy	XSS, code injection	🔴 HIGH
-X-Frame-Options	Clickjacking	🟡 MEDIUM
-X-Content-Type-Options	MIME-sniffing	🟡 MEDIUM
-Referrer-Policy	Information leakage	🟡 MEDIUM
-Permissions-Policy	Unauthorized feature access	🟡 MEDIUM
-Cross-Origin-* (3 headers)	Cross-origin attacks	🟡 MEDIUM
-Cache-Control / Pragma	Sensitive data caching	🟡 MEDIUM
-Example Output:
+## ✨ Features
 
-bash
+### 1. Security Headers Module
+
+🔹 **Tests:** 12 headers | 🔹 **Always Enabled**
+
+Detects missing HTTP security headers that protect against common web attacks.[^7][^3]
+
+**Headers Tested:**
+
+
+| Header | Protection Against | Severity |
+| :-- | :-- | :-- |
+| Strict-Transport-Security | SSL stripping, downgrade attacks | 🔴 HIGH |
+| Content-Security-Policy | XSS, code injection | 🔴 HIGH |
+| X-Frame-Options | Clickjacking | 🟡 MEDIUM |
+| X-Content-Type-Options | MIME-sniffing | 🟡 MEDIUM |
+| Referrer-Policy | Information leakage | 🟡 MEDIUM |
+| Permissions-Policy | Unauthorized feature access | 🟡 MEDIUM |
+| Cross-Origin-* (3 headers) | Cross-origin attacks | 🟡 MEDIUM |
+| Cache-Control / Pragma | Sensitive data caching | 🟡 MEDIUM |
+
+**Example Output:**
+
+```bash
 PHASE 1: SECURITY HEADERS
 ======================================================================
 
@@ -111,25 +115,31 @@ Analyzing security headers...
 🟢 [+] Present: X-Content-Type-Options
 
 Summary: 8/12 headers missing
+```
 
-2. OWASP Testing Module
 
-🔹 Tests: 2-3 tests | 🔹 Flags: Default (2021) or --owasp-2025
-OWASP Top 10:2021 (Default)
+***
 
-bash
+### 2. OWASP Testing Module
+
+🔹 **Tests:** 2–3 tests
+🔹 **Flags:** Default (2021) or `--owasp-2025` (targets OWASP Top 10:2025 release candidate)[^4][^1]
+
+#### OWASP Top 10:2021 (Default)
+
+```bash
 # Default mode - OWASP 2021
 python3 ultimate_tester_v9.1.py -u http://example.com
+```
 
-Tests:
+**Tests:**
 
-    ✅ A01:2021 - Broken Access Control (IDOR)
+- ✅ A01:2021 – Broken Access Control (IDOR)
+- ✅ A06:2021 – Vulnerable Components (jQuery, Angular)[^3][^7]
 
-    ✅ A06:2021 - Vulnerable Components (jQuery, Angular)
+**IDOR Example:**
 
-IDOR Example:
-
-text
+```text
 Testing: /user?id=123
   → Modifying to: /user?id=124
   → Response: 200 OK with user data
@@ -137,24 +147,25 @@ Testing: /user?id=123
 🔴 [!] IDOR vulnerability detected
     Risk: Unauthorized access to other users' data
     Recommended: Implement proper authorization checks
+```
 
-OWASP Top 10:2025 (New)
 
-bash
+#### OWASP Top 10:2025 (New – Release Candidate)
+
+```bash
 # OWASP 2025 mode
 python3 ultimate_tester_v9.1.py -u http://example.com --owasp-2025
+```
 
-Tests:
+**Tests:**
 
-    ✅ A01:2025 - Broken Access Control (IDOR)
+- ✅ A01:2025 – Broken Access Control (IDOR)[^1][^4]
+- ✅ A03:2025 – Supply Chain Failures (5 libraries + SRI checks)[^8][^9]
+- ✅ A05:2025 – Injection (SQL, XSS)[^10][^1]
 
-    ✅ A03:2025 - Supply Chain Failures (5 libraries + SRI checks)
+**Vulnerable Component Example:**
 
-    ✅ A05:2025 - Injection (SQL, XSS)
-
-Vulnerable Component Example:
-
-text
+```text
 [OWASP-2025-A03] Supply Chain
 
 Testing JavaScript libraries...
@@ -167,19 +178,26 @@ Testing JavaScript libraries...
 🔴 [!] Missing SRI on CDN script
     Risk: Compromised CDN could inject malicious code
     Recommended: Add integrity="sha384-..." to script tags
+```
 
-3. Burp Suite Pro Features
 
-🔹 Tests: 3 tests | 🔹 Flag: --burp-pro
+***
 
-Replicates Burp Suite Professional scanner capabilities.
+### 3. Burp Suite Pro Features
 
-bash
+🔹 **Tests:** 3 tests
+🔹 **Flag:** `--burp-pro`
+
+Replicates Burp Suite Professional–style scanner capabilities for several common web issues.[^6][^5]
+
+```bash
 python3 ultimate_tester_v9.1.py -u http://example.com --burp-pro
+```
 
-Test 1: CSRF Token Detection
 
-text
+#### Test 1: CSRF Token Detection
+
+```text
 [BURP-PRO] CSRF Testing
 ======================================================================
 
@@ -190,10 +208,12 @@ Form: /login (method=POST)
   Fields: username, password
   Risk: Cross-Site Request Forgery attacks possible
   Recommended: Implement CSRF tokens (csrf_token, _token, etc.)
+```
 
-Test 2: Path Traversal
 
-text
+#### Test 2: Path Traversal
+
+```text
 [BURP-PRO] Path Traversal
 ======================================================================
 
@@ -204,10 +224,12 @@ Testing: /download?file=report.pdf
     Response contains: root:x:0:0:root:/root:/bin/bash
     Severity: CRITICAL
     Recommended: Validate and sanitize file paths, use whitelist
+```
 
-Test 3: Open Redirect
 
-text
+#### Test 3: Open Redirect
+
+```text
 [BURP-PRO] Open Redirect
 ======================================================================
 
@@ -219,17 +241,24 @@ Testing: /redirect?url=https://example.com
     Location: https://evil.com
     Risk: Phishing attacks, malicious redirects
     Recommended: Validate redirect URLs against whitelist
+```
 
-4. Authentication Testing
 
-🔹 Tests: 2 tests | 🔹 Flag: --auth-tests
+***
 
-bash
+### 4. Authentication Testing
+
+🔹 **Tests:** 2 tests
+🔹 **Flag:** `--auth-tests`
+
+```bash
 python3 ultimate_tester_v9.1.py -u http://example.com --auth-tests
+```
 
-Test 1: User Enumeration
 
-text
+#### Test 1: User Enumeration
+
+```text
 [AUTH-01] User Enumeration
 ======================================================================
 
@@ -247,10 +276,12 @@ Username: nonexistent@example.com
     Different error messages reveal valid usernames
     Risk: Aids targeted attacks, credential stuffing
     Recommended: Use generic error message for all cases
+```
 
-Test 2: Password Autocomplete
 
-text
+#### Test 2: Password Autocomplete
+
+```text
 [AUTH-02] Password Autocomplete
 ======================================================================
 
@@ -261,17 +292,24 @@ Field: <input type="password" name="password">
   Missing: autocomplete="off" or autocomplete="new-password"
   Risk: Stored passwords accessible on shared devices
   Recommended: Add autocomplete="off" to password fields
+```
 
-5. Session Management Testing
 
-🔹 Tests: 3 tests | 🔹 Flag: --session-tests
+***
 
-bash
+### 5. Session Management Testing
+
+🔹 **Tests:** 3 tests
+🔹 **Flag:** `--session-tests`
+
+```bash
 python3 ultimate_tester_v9.1.py -u http://example.com --session-tests
+```
 
-Test 1: Session Storage
 
-text
+#### Test 1: Session Storage
+
+```text
 [SESSION-01] Session Storage
 ======================================================================
 
@@ -284,10 +322,12 @@ URL Analysis:
   Found: ?sessionid=abc123def456
   Risk: Session IDs logged in server logs, referrer headers, bookmarks
   Recommended: Use HttpOnly cookies for session management
+```
 
-Test 2: Cookie Security Flags
 
-text
+#### Test 2: Cookie Security Flags
+
+```text
 [SESSION-02] Cookie Flags
 ======================================================================
 
@@ -308,10 +348,12 @@ Cookie: user_token
   🟢 [+] HttpOnly: Present
   🟢 [+] Secure: Present
   🟡 [!] Missing SameSite
+```
 
-Test 3: Session Randomness
 
-text
+#### Test 3: Session Randomness
+
+```text
 [SESSION-06] Session Randomness
 ======================================================================
 
@@ -331,19 +373,26 @@ Cookie: PHPSESSID
       
 Example secure token: 
   a4f2b8c9d7e3f1g6h5i4j3k2l1m0n9o8p7
+```
 
-6. Data Validation Module 🆕
 
-🔹 Tests: 15 tests | 🔹 Flag: --data-validation
+***
 
-Comprehensive injection and validation testing based on OWASP checklist.
+### 6. Data Validation Module 🆕
 
-bash
+🔹 **Tests:** 15 tests
+🔹 **Flag:** `--data-validation`
+
+Comprehensive injection and validation testing based on OWASP-style checklists.[^3]
+
+```bash
 python3 ultimate_tester_v9.1.py -u http://example.com --data-validation
+```
 
-DV-01: Reflected XSS
 
-text
+#### DV-01: Reflected XSS
+
+```text
 [DATA-VAL-01] Reflected XSS
 ======================================================================
 
@@ -359,10 +408,12 @@ Payloads:
     Reflected in: <div>Results for: <script>alert(1)</script></div>
     Risk: Attackers can execute JavaScript in victim's browser
     Recommended: Sanitize input, HTML-encode output
+```
 
-DV-02: SQL Injection (CRITICAL)
 
-text
+#### DV-02: SQL Injection (CRITICAL)
+
+```text
 [DATA-VAL-02] SQL Injection
 ======================================================================
 
@@ -388,10 +439,12 @@ Example Fix (Python):
     # Good
     query = "SELECT * FROM users WHERE id = %s"
     cursor.execute(query, (user_id,))
+```
 
-DV-03: NoSQL Injection
 
-text
+#### DV-03: NoSQL Injection
+
+```text
 [DATA-VAL-03] NoSQL Injection
 ======================================================================
 
@@ -407,10 +460,12 @@ Payloads:
     Response: 200 OK (returns all users)
     Risk: Unauthorized data access, authentication bypass
     Recommended: Validate and sanitize input, use parameterized queries
+```
 
-DV-06: Command Injection (CRITICAL)
 
-text
+#### DV-06: Command Injection (CRITICAL)
+
+```text
 [DATA-VAL-06] Command Injection
 ======================================================================
 
@@ -438,10 +493,12 @@ Example Fix (Python):
     
     # Good
     subprocess.run(['ping', '-c', '1', host], check=True)
+```
 
-DV-07: Local File Inclusion
 
-text
+#### DV-07: Local File Inclusion
+
+```text
 [DATA-VAL-07] Local File Inclusion
 ======================================================================
 
@@ -458,10 +515,12 @@ Payloads:
       daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
     Risk: File system access, sensitive data exposure
     Recommended: Validate file paths, use whitelist, disable directory traversal
+```
 
-DV-09: HTTP Verb Tampering
 
-text
+#### DV-09: HTTP Verb Tampering
+
+```text
 [DATA-VAL-09] HTTP Verb Tampering
 ======================================================================
 
@@ -482,36 +541,43 @@ Unsafe Methods:
       Allowed: GET, POST, PUT, DELETE, OPTIONS
       
 Recommended: Disable PUT, DELETE, TRACE methods on production
+```
 
-Complete Data Validation Test List
-Test	Vulnerability	Severity	Example Payload
-DV-01	Reflected XSS	HIGH	<script>alert(1)</script>
-DV-02	SQL Injection	CRITICAL	' OR '1'='1
-DV-03	NoSQL Injection	HIGH	{"$ne":null}
-DV-04	LDAP Injection	HIGH	`)(uid=))(
-DV-05	XXE Injection	CRITICAL	<!DOCTYPE root [<!ENTITY test SYSTEM "file:///etc/passwd">]>
-DV-06	Command Injection	CRITICAL	; ls or $(whoami)
-DV-07	Local File Inclusion	HIGH	../../../etc/passwd
-DV-08	Remote File Inclusion	CRITICAL	http://evil.com/shell.php
-DV-09	HTTP Verb Tampering	MEDIUM	PUT/DELETE methods enabled
-DV-10	HTTP Response Splitting	HIGH	%0d%0aContent-Length:%200
-DV-11	HTML Injection	MEDIUM	<h1>test</h1>
-DV-12	SSI Injection	HIGH	<!--#exec cmd="ls"-->
-DV-13	XPath Injection	HIGH	' or '1'='1
-DV-14	HTTP Parameter Pollution	INFO	Duplicate parameters
-DV-15	Mass Assignment	HIGH	Hidden admin/role fields
-📥 Installation
-Requirements
 
-    Python 3.6+
+#### Complete Data Validation Test List
 
-    requests library
+| Test | Vulnerability | Severity | Example Payload |
+| :-- | :-- | :-- | :-- |
+| DV-01 | Reflected XSS | HIGH | `<script>alert(1)</script>` |
+| DV-02 | SQL Injection | CRITICAL | `' OR '1'='1` |
+| DV-03 | NoSQL Injection | HIGH | `{"$ne":null}` |
+| DV-04 | LDAP Injection | HIGH | `)(uid=))(` |
+| DV-05 | XXE Injection | CRITICAL | `<!DOCTYPE root [<!ENTITY test SYSTEM "file:///etc/passwd">]>` |
+| DV-06 | Command Injection | CRITICAL | `; ls` or `$(whoami)` |
+| DV-07 | Local File Inclusion | HIGH | `../../../etc/passwd` |
+| DV-08 | Remote File Inclusion | CRITICAL | `http://evil.com/shell.php` |
+| DV-09 | HTTP Verb Tampering | MEDIUM | PUT/DELETE methods enabled |
+| DV-10 | HTTP Response Splitting | HIGH | `%0d%0aContent-Length:%200` |
+| DV-11 | HTML Injection | MEDIUM | `<h1>test</h1>` |
+| DV-12 | SSI Injection | HIGH | `<!--#exec cmd="ls"-->` |
+| DV-13 | XPath Injection | HIGH | `' or '1'='1` |
+| DV-14 | HTTP Parameter Pollution | INFO | Duplicate parameters |
+| DV-15 | Mass Assignment | HIGH | Hidden `admin` / `role` fields |
 
-    beautifulsoup4 library
 
-Install
+***
 
-bash
+## 📥 Installation
+
+**Requirements**
+
+- Python 3.6+
+- `requests` library
+- `beautifulsoup4` library[^2]
+
+**Install**
+
+```bash
 # Clone or download
 git clone https://github.com/yourusername/ultimate-tester.git
 cd ultimate-tester
@@ -524,16 +590,22 @@ pip install requests beautifulsoup4
 
 # Make executable (Linux/Mac)
 chmod +x ultimate_tester_v9.1.py
+```
 
-Verify Installation
+**Verify Installation**
 
-bash
+```bash
 python3 ultimate_tester_v9.1.py --help
+```
 
-🎮 Usage Examples
-Basic Scans
 
-bash
+***
+
+## 🎮 Usage Examples
+
+### Basic Scans
+
+```bash
 # 1. Quick scan (16 tests: headers + OWASP)
 python3 ultimate_tester_v9.1.py -u http://testphp.vulnweb.com
 
@@ -542,10 +614,12 @@ python3 ultimate_tester_v9.1.py -u http://example.com -v
 
 # 3. Save results to JSON
 python3 ultimate_tester_v9.1.py -u http://example.com -O report.json
+```
 
-Module-Specific Scans
 
-bash
+### Module-Specific Scans
+
+```bash
 # 4. Data validation only (15 tests)
 python3 ultimate_tester_v9.1.py -u http://example.com --data-validation
 
@@ -557,10 +631,12 @@ python3 ultimate_tester_v9.1.py -u http://example.com --auth-tests
 
 # 7. Burp Pro features only (3 tests)
 python3 ultimate_tester_v9.1.py -u http://example.com --burp-pro
+```
 
-Combined Scans
 
-bash
+### Combined Scans
+
+```bash
 # 8. OWASP 2025 + Data Validation
 python3 ultimate_tester_v9.1.py -u http://example.com \
   --owasp-2025 \
@@ -580,10 +656,12 @@ python3 ultimate_tester_v9.1.py -u http://example.com \
   --session-tests \
   --data-validation \
   -O complete_scan.json
+```
 
-CI/CD Integration
 
-bash
+### CI/CD Integration
+
+```bash
 # 11. GitHub Actions example
 - name: Security Scan
   run: |
@@ -598,11 +676,16 @@ bash
       echo "Critical vulnerabilities found!"
       exit 1
     fi
+```
 
-📊 Output Examples
-Terminal Output (Color-Coded)
 
-text
+***
+
+## 📊 Output Examples
+
+### Terminal Output (Color-Coded)
+
+```text
 ======================================================================
   ULTIMATE TESTER v9.1
   OWASP 2025 + Burp + Auth + Session + Data Val
@@ -652,27 +735,29 @@ SEVERITY BREAKDOWN:
 
 DETAILED FINDINGS:
 
-[1] Missing Header - Strict-Transport-Security [Security]
+[^1] Missing Header - Strict-Transport-Security [Security]
     🔴 Severity: HIGH
     URL: http://example.com
     Description: Forces browsers to use HTTPS connections only
     Recommended: Strict-Transport-Security: max-age=31536000
 
-[2] SQL Injection [Data Validation]
+[^2] SQL Injection [Data Validation]
     🔴 Severity: CRITICAL
     URL: http://example.com/product?id=1
     Description: SQL injection vulnerability
     Recommended: Use parameterized queries
 
-[3] Missing HttpOnly (PHPSESSID) [Session]
+[^3] Missing HttpOnly (PHPSESSID) [Session]
     🔴 Severity: HIGH
     URL: http://example.com
     Description: XSS can steal cookie
     Recommended: Add HttpOnly flag
+```
 
-JSON Output Format
 
-json
+### JSON Output Format
+
+```json
 {
   "target": "http://example.com",
   "scan_time": "2025-11-10 00:49:00",
@@ -706,26 +791,40 @@ json
     }
   ]
 }
+```
 
-⚙️ Configuration
-Test Coverage by Flag
-Configuration	Tests	Modules
-Default (no flags)	16	Headers (12) + OWASP (2)
---data-validation	31	+ Data validation (15)
---session-tests	34	+ Session management (3)
---auth-tests	36	+ Authentication (2)
---burp-pro	39	+ Burp Suite Pro (3)
-ALL FLAGS	42+	All modules enabled
-Scan Performance
-Scan Type	Time	Tests
-Quick	~5s	16
-Medium	~10s	25
-Complete	~20s	42+
-🧪 Testing on Safe Targets
 
-Always test on systems you own or have permission to test. Here are intentionally vulnerable applications for practice:
+***
 
-bash
+## ⚙️ Configuration
+
+### Test Coverage by Flag
+
+| Configuration | Tests | Modules |
+| :-- | :-- | :-- |
+| Default (no flags) | 16 | Headers (12) + OWASP (2) |
+| `--data-validation` | 31 | + Data validation (15) |
+| `--session-tests` | 34 | + Session management (3) |
+| `--auth-tests` | 36 | + Authentication (2) |
+| `--burp-pro` | 39 | + Burp Suite Pro–style checks (3) |
+| ALL FLAGS | 42+ | All modules enabled |
+
+### Scan Performance
+
+| Scan Type | Time | Tests |
+| :-- | :-- | :-- |
+| Quick | ~5s | 16 |
+| Medium | ~10s | 25 |
+| Complete | ~20s | 42+ |
+
+
+***
+
+## 🧪 Testing on Safe Targets
+
+Always test on systems you own or have permission to test; OWASP recommends using intentionally vulnerable apps for practice.[^3]
+
+```bash
 # OWASP Vulnerable Applications
 python3 ultimate_tester_v9.1.py -u http://testphp.vulnweb.com --data-validation
 python3 ultimate_tester_v9.1.py -u http://demo.testfire.net --burp-pro
@@ -737,13 +836,18 @@ python3 ultimate_tester_v9.1.py -u http://localhost/dvwa --data-validation
 
 # OWASP Juice Shop
 python3 ultimate_tester_v9.1.py -u http://localhost:3000 --owasp-2025
+```
 
-🤝 Contributing
 
-Contributions are welcome! Here's how to contribute:
-Adding New Tests
+***
 
-python
+## 🤝 Contributing
+
+Contributions are welcome; extending test coverage aligns well with OWASP WSTG-style methodologies.[^3]
+
+### Adding New Tests
+
+```python
 # Example template
 @staticmethod
 def test_new_vulnerability(session, urls):
@@ -767,95 +871,94 @@ def test_new_vulnerability(session, urls):
     
     print(f"  {Colors.OKGREEN}[+] No vulnerability{Colors.ENDC}")
     return issues
+```
 
-Contribution Guidelines
 
-    Fork the repository
+### Contribution Guidelines
 
-    Create feature branch (git checkout -b feature/NewTest)
+- Fork the repository
+- Create feature branch: `git checkout -b feature/NewTest`
+- Add comprehensive tests
+- Update documentation
+- Submit pull request
 
-    Add comprehensive tests
+***
 
-    Update documentation
+## 📜 License
 
-    Submit pull request
+This tool is provided for **educational and authorized testing purposes only**.[^3]
 
-📜 License
+⚠️ **Important:**
 
-This tool is provided for educational and authorized testing purposes only.
+- Only test systems you own or have explicit written permission to test
+- Unauthorized testing is illegal
+- Use responsibly and ethically
+- Use is at your own risk; the author is not responsible for misuse or damage
 
-⚠️ Important:
+***
 
-    Only test systems you own or have explicit written permission to test
+## 🙏 Credits \& Acknowledgments
 
-    Unauthorized testing is illegal
+- OWASP Testing Guide – Testing methodology[^3]
+- Burp Suite – Feature inspiration for scanner-style checks[^5][^6]
+- Python Security Community – Libraries and best practices
 
-    Use responsibly and ethically
+***
 
-🙏 Credits & Acknowledgments
+## 📞 Support \& Help
 
-    OWASP Testing Guide - Testing methodology
+### Getting Help
 
-    Burp Suite - Feature inspiration
+- 📖 Check the complete documentation
+- 🐛 Report issues on GitHub
+- 💬 Join security community discussions
 
-    Python Security Community - Libraries and best practices
 
-📞 Support & Help
-Getting Help
+### Recommended Learning Resources
 
-    📖 Check the complete documentation
+- OWASP Testing Guide[^3]
+- PortSwigger Web Security Academy[^5]
+- HackerOne Disclosed Reports[^11]
 
-    🐛 Report issues on GitHub
+***
 
-    💬 Join security community discussions
+## 📈 Roadmap
 
-Recommended Learning Resources
+**Planned for v10.0**
 
-    OWASP Testing Guide
+- Stored XSS detection
+- DOM-based XSS scanning
+- SSRF testing
+- GraphQL injection tests
+- API security testing
+- Rate limiting detection
+- WAF detection \& bypass
+- Multi-threaded scanning
+- Custom payload files
+- HTML report generation
+- Comparison with previous scans
 
-    PortSwigger Web Security Academy
+***
 
-    HackerOne Disclosed Reports
+## 📊 Statistics
 
-📈 Roadmap
-Planned for v10.0
-
-    Stored XSS detection
-
-    DOM-based XSS scanning
-
-    SSRF testing
-
-    GraphQL injection tests
-
-    API security testing
-
-    Rate limiting detection
-
-    WAF detection & bypass
-
-    Multi-threaded scanning
-
-    Custom payload files
-
-    HTML report generation
-
-    Comparison with previous scans
-
-📊 Statistics
-
-text
+```text
 File Size:      35.8 KB
 Lines of Code:  654
 Python Version: 3.6+
 Total Tests:    42+
 Modules:        6
 Last Updated:   November 10, 2025
+```
 
-🎯 Quick Reference
-Command Cheatsheet
 
-bash
+***
+
+## 🎯 Quick Reference
+
+### Command Cheatsheet
+
+```bash
 # Basic
 -u URL                  # Target URL (required)
 -v                      # Verbose output
@@ -865,25 +968,54 @@ bash
 --owasp-2025           # OWASP 2025 instead of 2021
 --burp-pro             # Burp Suite Pro features
 --auth-tests           # Authentication testing
---session-tests        # Session management testing
+--session-tests        # Session management tests
 --data-validation      # Data validation tests (15 tests)
 
 # Examples
 python3 ultimate_tester_v9.1.py -u http://example.com
 python3 ultimate_tester_v9.1.py -u http://example.com --data-validation
 python3 ultimate_tester_v9.1.py -u http://example.com --owasp-2025 --burp-pro --auth-tests --session-tests --data-validation -O report.json
+```
+
+
+***
 
 <div align="center">
 
-Made with ❤️ for the security community
+Made with ❤️ for the security community  
 
-⭐ Star this repo if you find it useful! ⭐
+⭐ **Star this repo if you find it useful!** ⭐  
 
-Report Bug · Request Feature · Documentation
+Report Bug · Request Feature · Documentation  
+
 </div>
+**Version:** 9.1
+**Last Updated:** November 10, 2025
+**Status:** ✅ Production Ready
 
-Version: 9.1
-Last Updated: November 10, 2025
-Status: ✅ Production Ready
+**Happy (Legal) Hacking! 🔒🔍✨**
 
-Happy (Legal) Hacking! 🔒🔍✨
+<div align="center">⁂</div>
+
+[^1]: https://owasp.org/Top10/2025/0x00_2025-Introduction/
+
+[^2]: https://docs.github.com/en/get-started/start-your-journey/setting-up-your-profile
+
+[^3]: https://github.com/OWASP/wstg/blob/master/document/README.md
+
+[^4]: https://owasp.org/Top10/2025/en/
+
+[^5]: https://portswigger.net/burp/documentation/scanner
+
+[^6]: https://portswigger.net/burp/pro/features
+
+[^7]: https://owasp.org/www-project-top-ten/
+
+[^8]: https://www.reflectiz.com/blog/owasp-top-ten-2025/
+
+[^9]: https://www.fastly.com/blog/new-2025-owasp-top-10-list-what-changed-what-you-need-to-know
+
+[^10]: https://www.aikido.dev/blog/owasp-top-10-2025-changes-for-developers
+
+[^11]: https://www.hackerone.com/knowledge-center/ultimate-9-point-website-security-checklist
+
